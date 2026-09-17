@@ -55,6 +55,10 @@ make test L=cpp T=arrays                 # both filters
 make clean                               # delete build output
 ```
 
+Every language runs even if an earlier one fails, so a broken C++ test never
+hides a broken Python test. A misspelled `L=` or `T=` is rejected with the list
+of valid values rather than silently passing.
+
 C++ builds with `-std=c++20 -Wall -Wextra -g -fsanitize=address,undefined`.
 The sanitizers are deliberate: they turn silent out-of-bounds reads and
 signed-overflow bugs into loud, located crashes while you are still learning

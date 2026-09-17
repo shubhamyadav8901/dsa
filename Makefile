@@ -17,6 +17,8 @@ JAVA     ?= java
 PY       ?= python3
 BUILD    := build
 
+LANGUAGES := cpp py java
+
 # Optional filters (may be empty)
 L ?=
 T ?=
@@ -51,14 +53,27 @@ run:
 	esac
 
 # --- tests ------------------------------------------------------------------
+# Every language runs even when an earlier one fails, so one broken C++ test
+# never hides a broken Python test.
 test:
-	@$(MAKE) --no-print-directory $(if $(L),test-$(L),test-cpp test-py test-java) T="$(T)"
+	@case "|$(L)" in \
+	  "|"|"|cpp"|"|py"|"|java") ;; \
+	  *) echo "Unknown language: $(L)   (use L=cpp, L=py or L=java)"; exit 1 ;; \
+	esac
+	@test -z "$(T)" || test -d "cpp/$(T)" || { \
+	  echo "Unknown topic: $(T)"; \
+	  echo "Topics: `ls cpp | tr '\n' ' '`"; exit 1; }
+	@fail=0; \
+	 for lang in $(if $(L),$(L),$(LANGUAGES)); do \
+	   $(MAKE) --no-print-directory test-$$lang T="$(T)" || fail=1; \
+	 done; \
+	 exit $$fail
 
 test-cpp:
 	@echo "=== C++ tests ==="
 	@dir="tests/cpp$(if $(T),/$(T))"; \
 	 files=`find "$$dir" -name '*_test.cpp' 2>/dev/null | sort`; \
-	 if [ -z "$$files" ]; then echo "  (no C++ tests found in $$dir)"; exit 0; fi; \
+	 if [ -z "$$files" ]; then echo "  (no C++ tests yet in $$dir)"; exit 0; fi; \
 	 mkdir -p $(BUILD)/bin; fail=0; \
 	 for f in $$files; do \
 	   out="$(BUILD)/bin/`basename $$f .cpp`"; \
@@ -70,14 +85,24 @@ test-cpp:
 	 done; \
 	 exit $$fail
 
+# Python's unittest prints its own format; its output is captured so that a
+# passing run reports the same one-line PASS as C++ and Java, and a failing run
+# prints everything unittest had to say.
 test-py:
 	@echo "=== Python tests ==="
 	@dir="tests/py$(if $(T),/$(T))"; \
 	 files=`find "$$dir" -name 'test_*.py' 2>/dev/null | sort`; \
-	 if [ -z "$$files" ]; then echo "  (no Python tests found in $$dir)"; exit 0; fi; \
-	 fail=0; \
+	 if [ -z "$$files" ]; then echo "  (no Python tests yet in $$dir)"; exit 0; fi; \
+	 mkdir -p $(BUILD); fail=0; \
 	 for f in $$files; do \
-	   PYTHONPATH=. $(PY) "$$f" || fail=1; \
+	   log="$(BUILD)/`basename $$f .py`.log"; \
+	   if PYTHONPATH=. $(PY) "$$f" > "$$log" 2>&1; then \
+	     n=`sed -n 's/^Ran \([0-9][0-9]*\) test.*/\1/p' "$$log"`; \
+	     echo "  PASS  $$f  ($$n tests)"; \
+	   else \
+	     cat "$$log"; \
+	     echo "  FAILED $$f"; fail=1; \
+	   fi; \
 	 done; \
 	 exit $$fail
 
@@ -85,7 +110,7 @@ test-java:
 	@echo "=== Java tests ==="
 	@dir="tests/java$(if $(T),/$(T))"; \
 	 files=`find "$$dir" -name '*Test.java' 2>/dev/null | sort`; \
-	 if [ -z "$$files" ]; then echo "  (no Java tests found in $$dir)"; exit 0; fi; \
+	 if [ -z "$$files" ]; then echo "  (no Java tests yet in $$dir)"; exit 0; fi; \
 	 mkdir -p $(BUILD)/java; fail=0; \
 	 for f in $$files; do \
 	   cls=`basename "$$f" .java`; \
