@@ -6,13 +6,14 @@
 #include <string>
 #include <random>
 #include <algorithm>
+#include <cstddef>
 
-std::string generate_large_string(size_t size, int seed = 42) {
+std::string generate_large_string(std::size_t size, int seed = 42) {
     std::string output;
     output.reserve(size);
     std::mt19937 rng(seed);
 
-    for (size_t i = 0; i < size; i++) {
+    for (std::size_t i = 0; i < size; i++) {
         output += 'a' + (rng() % 26);
     }
 

@@ -20,8 +20,8 @@ The vocabulary everything else is written in.
 - [x] Arrays — memory layout, why indexing is O(1)
 - [x] Strings — and why they are not just arrays
 - [ ] Functions, parameters, return values
-- [ ] References (`&`) — pass by value vs pass by reference
-- [ ] Pointers — addresses, dereferencing, `nullptr`
+- [x] References (`&`) — pass by value vs pass by reference
+- [~] Pointers — addresses, dereferencing, `nullptr` — concept done; used for real in Phase 2 linked lists
 - [~] STL: `vector` — size vs capacity, amortized push_back; API still to cover
 - [~] STL: `string` — costs and `+=` vs `+` done; find/substr API still to cover
 - [ ] STL: `pair`
@@ -45,7 +45,7 @@ Where most interview problems actually live.
 - [ ] Prefix sums
 - [x] Frequency counting — fixed-size array over a known alphabet
 - [ ] Hashing — the idea, then `unordered_map`/`unordered_set`
-- [ ] Two pointers — opposite ends
+- [x] Two pointers — opposite ends
 - [~] Two pointers — fast/slow — read/write variant done via Move Zeroes
 - [ ] Sliding window — fixed size
 - [ ] Sliding window — variable size
