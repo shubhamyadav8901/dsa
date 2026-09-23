@@ -8,7 +8,6 @@
 #include <string>
 
 bool is_anagram(const std::string& a, const std::string& b) {
-    // TODO
     if (a.size() != b.size()) return false;
 
     int counts[26] = {};

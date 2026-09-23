@@ -5,6 +5,7 @@
 
 #include <string>
 #include <random>
+#include <algorithm>
 
 std::string generate_large_string(size_t size, int seed = 42) {
     std::string output;
@@ -18,7 +19,7 @@ std::string generate_large_string(size_t size, int seed = 42) {
     return output;
 }
 
-std::string generate_anagram(std::string& input, int seed = 42) {
+std::string generate_anagram(const std::string& input, int seed = 42) {
     std::string output = input;
     std::mt19937 rng(seed);
 
