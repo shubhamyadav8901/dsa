@@ -7,7 +7,6 @@
  *    The test class has its own {@code main}, so this one is simply never called.
  */
 public class HelloDsa {
-
     /** Adds 1 + 2 + ... + n one step at a time. */
     public static long sumToNLoop(int n) {
         long total = 0;

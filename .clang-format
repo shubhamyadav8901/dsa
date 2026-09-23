@@ -1,0 +1,29 @@
+# Formatting for this repo. Applies to C++ and Java.
+#
+#   make fmt         reformat everything in place
+#   make fmt-check   fail if anything is unformatted (no changes made)
+#
+# clang-format ships with the Xcode Command Line Tools on macOS; the Makefile
+# finds it via `xcrun -f clang-format` when it is not on PATH.
+---
+Language: Cpp
+BasedOnStyle: Google
+IndentWidth: 4
+ColumnLimit: 100
+AccessModifierOffset: -4
+AllowShortFunctionsOnASingleLine: Empty
+# Guard clauses like `if (!found) return -1;` stay on one line.
+AllowShortIfStatementsOnASingleLine: WithoutElse
+AllowShortLoopsOnASingleLine: false
+PointerAlignment: Left
+DerivePointerAlignment: false
+# Test files include a .cpp on purpose, and the order matters. Leave it alone.
+SortIncludes: Never
+SpacesBeforeTrailingComments: 2
+---
+Language: Java
+BasedOnStyle: Google
+IndentWidth: 4
+ColumnLimit: 100
+SortIncludes: Never
+---

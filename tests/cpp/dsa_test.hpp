@@ -31,9 +31,15 @@ inline int checks_run = 0;
 inline int checks_failed = 0;
 
 // --- turning a value into something readable -------------------------------
-inline std::string show(bool b) { return b ? "true" : "false"; }
-inline std::string show(const std::string& s) { return "\"" + s + "\""; }
-inline std::string show(const char* s) { return std::string("\"") + s + "\""; }
+inline std::string show(bool b) {
+    return b ? "true" : "false";
+}
+inline std::string show(const std::string& s) {
+    return "\"" + s + "\"";
+}
+inline std::string show(const char* s) {
+    return std::string("\"") + s + "\"";
+}
 
 template <typename A, typename B>
 std::string show(const std::pair<A, B>& p);

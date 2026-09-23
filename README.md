@@ -53,7 +53,14 @@ make test L=cpp                          # one language  (cpp | py | java)
 make test T=arrays                       # one topic
 make test L=cpp T=arrays                 # both filters
 make clean                               # delete build output
+make fmt                                 # reformat C++ and Java in place
+make fmt-check                           # fail if anything is unformatted
 ```
+
+Formatting is `clang-format` driven by `.clang-format` in the repo root — it
+covers C++ and Java. It ships with the Xcode Command Line Tools, so there is
+nothing to install; the Makefile finds it via `xcrun` when it is not on `PATH`.
+Python is skipped unless `black` is installed.
 
 Every language runs even if an earlier one fails, so a broken C++ test never
 hides a broken Python test. A misspelled `L=` or `T=` is rejected with the list

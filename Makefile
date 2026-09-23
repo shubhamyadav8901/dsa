@@ -130,3 +130,32 @@ clean:
 	@rm -rf $(BUILD)
 	@find . -name '__pycache__' -type d -prune -exec rm -rf {} + 2>/dev/null || true
 	@echo "Cleaned."
+
+# --- formatting -------------------------------------------------------------
+# clang-format handles both C++ and Java. It ships with the Xcode Command Line
+# Tools, so it needs no install; it is just not on PATH by default.
+CLANG_FORMAT ?= $(shell command -v clang-format 2>/dev/null || xcrun -f clang-format 2>/dev/null)
+FORMAT_DIRS  := cpp java tests
+
+.PHONY: fmt fmt-check
+
+fmt:
+	@test -n "$(CLANG_FORMAT)" || { echo "clang-format not found. Install the Xcode Command Line Tools: xcode-select --install"; exit 1; }
+	@files=`find $(FORMAT_DIRS) \( -name '*.cpp' -o -name '*.hpp' -o -name '*.java' \) 2>/dev/null | sort`; \
+	 if [ -z "$$files" ]; then echo "  (nothing to format)"; exit 0; fi; \
+	 $(CLANG_FORMAT) -i $$files && echo "  formatted `echo $$files | wc -w | tr -d ' '` files"
+	@if command -v black >/dev/null 2>&1; then \
+	   black --quiet --line-length 100 py tests/py && echo "  formatted Python with black"; \
+	 else \
+	   echo "  (skipping Python: no formatter installed - 'pip install black' to enable)"; \
+	 fi
+
+fmt-check:
+	@test -n "$(CLANG_FORMAT)" || { echo "clang-format not found. Install the Xcode Command Line Tools: xcode-select --install"; exit 1; }
+	@files=`find $(FORMAT_DIRS) \( -name '*.cpp' -o -name '*.hpp' -o -name '*.java' \) 2>/dev/null | sort`; \
+	 if [ -z "$$files" ]; then echo "  (nothing to check)"; exit 0; fi; \
+	 if $(CLANG_FORMAT) --dry-run -Werror $$files; then \
+	   echo "  all `echo $$files | wc -w | tr -d ' '` files are formatted"; \
+	 else \
+	   echo ""; echo "  Run 'make fmt' to fix."; exit 1; \
+	 fi

@@ -67,15 +67,14 @@ I had not seen before.
 
 Scheduled by session number. See the schedule in `AGENTS.md`.
 
-| Item | Last seen (session) | Due (session) | Why queued |
-|------|---------------------|---------------|------------|
-| Second Largest — re-solve from a blank file | 1 | 2 | Took 4 attempts; the algorithm should be automatic |
-| Sentinel vs flag for "absent" | 1 | 2 | Cost two debugging rounds |
-| Choosing adversarial test cases | 1 | 2, then 4, then 6 | The session's dominant weakness — drill it until it is reflexive |
-| `std::sort` is O(n log n) | 1 | 4 | Initially answered O(n²); self-corrected, but verify it stuck |
-| Second Largest variant (k-th largest) | 1 | 6 | Confirms the pattern transfers instead of being memorised |
-
----
+| Item | Drill | Last seen | Due | Why queued |
+|------|-------|-----------|-----|------------|
+| Second Largest — pattern, invariant, complexity from memory | Recall | 1 | 2 | 60-second check that the idea outlived the session |
+| A subtly wrong second-largest / running-max implementation | Attack | — | 2 | Targets the dominant weakness directly, on code that isn't theirs |
+| Constraints → test list, no solution | Constraints-to-tests | — | 2, 4 | The constraint "may be negative" went untested three times |
+| Second largest → k-th largest, or second *smallest* | Transfer | — | 4 | Proves the pattern generalised rather than being memorised |
+| `std::sort` is O(n log n) | Recall | 1 | 4 | First answer was O(n²); confirm the correction stuck |
+| Second Largest from a blank file | Re-implement | 1 | 13 | Only once memory has actually decayed — ~3 weeks out |
 
 ## Readiness Assessment
 

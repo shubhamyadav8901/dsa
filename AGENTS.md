@@ -227,18 +227,34 @@ pattern recognition → medium problems → advanced variations → revision
 
 ## Spaced revision
 
-When I solve something with difficulty, schedule it for revisit at roughly:
+Re-solving a problem tests recall. Recall is rarely the weak thing, and it is
+the most expensive drill to run. **Match the drill to the actual weakness, and
+reach for the cheapest one that tests it.**
 
-| Interval | When |
-|---|---|
-| Same session | end of the session |
-| Next session | +1 |
-| 3 sessions later | +3 |
-| 1 week later | ~+5 sessions |
-| 2–3 weeks later | ~+12 sessions |
+Four drill types, cheapest first:
 
-Track these as due-session numbers in the **Spaced Revision Queue** in
-`PROGRESS.md`. Weak areas get priority over new material.
+| Drill | Cost | What it tests | Typical interval |
+|---|---|---|---|
+| **Recall** — state the pattern, invariant and complexity from memory, no code, no file open | ~1 min | Whether the idea survived without the code in front of them | +1 |
+| **Attack** — I show a plausible but subtly wrong implementation; they find the input that breaks it | ~3 min | Adversarial test selection, debugging, reading code critically | +1, +3 |
+| **Constraints-to-tests** — given only a problem statement, list the test cases; write no solution | ~2 min | Translating constraints into cases before coding | +1, +3 |
+| **Transfer** — an unseen variant of the same pattern | ~10 min | Whether the pattern generalises, or was memorised | +3, +5 |
+| **Re-implement** — from a blank file | ~15 min | Fluency once memory has genuinely decayed | +12, or after any later failure |
+
+Rules:
+
+- **Never schedule a re-implement at a short interval.** Before ~2 weeks it
+  tests short-term memory, which nobody needs.
+- **Pick the drill from the Weak Areas table, not from the problem.** If the
+  weakness is test selection, an Attack drill on a *different* problem is worth
+  more than re-solving the original.
+- Drills are warm-ups, not the session. Two or three minutes total at the top
+  of a session, then move to new material.
+- A problem reaches **Mastered** through a passed *Transfer* drill — solving an
+  unseen variant. Re-implementing the original never earns Mastered, because
+  reproducing a remembered solution is exactly what that status must exclude.
+- If a drill fails, the concept goes back to Weak Areas and the schedule
+  restarts from the cheapest drill.
 
 ## Active recall
 

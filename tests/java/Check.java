@@ -21,7 +21,8 @@ public final class Check {
 
     public static void eq(Object actual, Object expected, String what) {
         checksRun++;
-        if (Objects.deepEquals(actual, expected)) return;
+        if (Objects.deepEquals(actual, expected))
+            return;
         checksFailed++;
         System.out.println("  FAIL  " + what);
         System.out.println("        expected: " + show(expected));
@@ -42,20 +43,28 @@ public final class Check {
             System.out.println("  PASS  " + suite + "  (" + checksRun + " checks)");
             return 0;
         }
-        System.out.println("  FAILED " + suite + "  (" + checksFailed + " of " + checksRun
-                + " checks failed)");
+        System.out.println(
+            "  FAILED " + suite + "  (" + checksFailed + " of " + checksRun + " checks failed)");
         return 1;
     }
 
     private static String show(Object value) {
-        if (value == null) return "null";
-        if (value instanceof int[] a) return Arrays.toString(a);
-        if (value instanceof long[] a) return Arrays.toString(a);
-        if (value instanceof double[] a) return Arrays.toString(a);
-        if (value instanceof boolean[] a) return Arrays.toString(a);
-        if (value instanceof char[] a) return Arrays.toString(a);
-        if (value instanceof Object[] a) return Arrays.deepToString(a);
-        if (value instanceof String s) return "\"" + s + "\"";
+        if (value == null)
+            return "null";
+        if (value instanceof int[] a)
+            return Arrays.toString(a);
+        if (value instanceof long[] a)
+            return Arrays.toString(a);
+        if (value instanceof double[] a)
+            return Arrays.toString(a);
+        if (value instanceof boolean[] a)
+            return Arrays.toString(a);
+        if (value instanceof char[] a)
+            return Arrays.toString(a);
+        if (value instanceof Object[] a)
+            return Arrays.deepToString(a);
+        if (value instanceof String s)
+            return "\"" + s + "\"";
         return String.valueOf(value);
     }
 }
