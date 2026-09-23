@@ -16,11 +16,21 @@ int main() {
     // Every sentence in it is a test case waiting to be written.
     //
     CHECK_EQ(moved({0, 1, 0, 3, 12}), (std::vector<int>{1, 3, 12, 0, 0}));
-    CHECK_EQ(moved({0, 0, 0, 0, 0, 0, 0, 0}), (std::vector<int>{0, 0, 0, 0, 0, 0, 0, 0}));
+    CHECK_EQ(moved({0, 0, 0, 0, 0, 0, 0, 0}),
+             (std::vector<int>{0, 0, 0, 0, 0, 0, 0, 0}));
     CHECK_EQ(moved({1, 1, 2, 3, 12}), (std::vector<int>{1, 1, 2, 3, 12}));
+    CHECK_EQ(moved({1, 1, 0, 2, 3, 0, 0, 12}),
+             (std::vector<int>{1, 1, 2, 3, 12, 0, 0, 0}));
+    CHECK_EQ(
+        moved({1, 1, 0, 2, 3, 0, 0, 12, 0, 0, 0, 0, 13, 14, 0, 0}),
+        (std::vector<int>{1, 1, 2, 3, 12, 13, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0}));
     CHECK_EQ(moved({-1, 0, 2, -3, 0}), (std::vector<int>{-1, 2, -3, 0, 0}));
-    CHECK_EQ(moved({-1, 2, -3, 0, 0, 0}), (std::vector<int>{-1, 2, -3, 0, 0, 0}));
-    CHECK_EQ(moved({INT_MIN, 0, INT_MAX, 0, -1, 1, INT_MAX, 0, INT_MIN}),
-             (std::vector<int>{INT_MIN, INT_MAX, -1, 1, INT_MAX, INT_MIN, 0, 0}));
+    CHECK_EQ(moved({-1, 2, -3, 0, 0, 0}),
+             (std::vector<int>{-1, 2, -3, 0, 0, 0}));
+    CHECK_EQ(
+        moved({INT_MIN, 0, INT_MAX, 0, -1, 1, INT_MAX, 0, INT_MIN}),
+        (std::vector<int>{INT_MIN, INT_MAX, -1, 1, INT_MAX, INT_MIN, 0, 0, 0}));
+    CHECK_EQ(moved({1}), (std::vector<int>{1}));
+    CHECK_EQ(moved({0}), (std::vector<int>{0}));
     DSA_REPORT();
 }

@@ -9,7 +9,7 @@
 Language: Cpp
 BasedOnStyle: Google
 IndentWidth: 4
-ColumnLimit: 100
+ColumnLimit: 80
 AccessModifierOffset: -4
 AllowShortFunctionsOnASingleLine: Empty
 # Guard clauses like `if (!found) return -1;` stay on one line.

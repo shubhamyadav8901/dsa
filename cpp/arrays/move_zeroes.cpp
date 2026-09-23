@@ -15,6 +15,27 @@
 
 void move_zeroes(std::vector<int>& v) {
     // TODO
+    size_t j = 0;
+
+    // increment i until 0
+    // start j from i and increment until non zero
+    // swap -> increment i, increment j until non zero
+    // repeat
+
+    for (size_t i = 0; i < v.size() && j < v.size(); i++) {
+        if (v.at(i) != 0) {
+            j++;
+            continue;
+        }
+
+        while (j < v.size() && v.at(j) == 0) {
+            j++;
+        }
+
+        if (j >= v.size()) break;
+
+        std::swap(v.at(i), v.at(j));
+    }
 }
 
 #ifndef DSA_TEST

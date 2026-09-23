@@ -28,9 +28,10 @@ int main() {
             total_elements_copied += static_cast<long long>(v.size()) - 1;
         }
 
-        std::cout << "  " << push << "      " << v.size() << "        " << v.capacity()
-                  << "         "
-                  << (reallocated ? "REALLOCATED - copied everything" : "wrote into spare room")
+        std::cout << "  " << push << "      " << v.size() << "        "
+                  << v.capacity() << "         "
+                  << (reallocated ? "REALLOCATED - copied everything"
+                                  : "wrote into spare room")
                   << "\n";
 
         previous_capacity = v.capacity();

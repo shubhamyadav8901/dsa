@@ -29,8 +29,10 @@ long long sum_to_n_formula(int n) {
 int main() {
     const int n = 10;
     std::cout << "sum_to_n_loop(" << n << ")    = " << sum_to_n_loop(n) << "\n";
-    std::cout << "sum_to_n_formula(" << n << ") = " << sum_to_n_formula(n) << "\n";
-    std::cout << "\nBoth print the same number. They do not do the same amount of work.\n";
+    std::cout << "sum_to_n_formula(" << n << ") = " << sum_to_n_formula(n)
+              << "\n";
+    std::cout << "\nBoth print the same number. They do not do the same amount "
+                 "of work.\n";
     return 0;
 }
 #endif

@@ -23,7 +23,8 @@ int main() {
     std::cout << "\ngap between neighbouring elements, in bytes:\n";
     for (std::size_t i = 1; i < v.size(); ++i) {
         std::cout << "  &v[" << i << "] - &v[" << i - 1 << "] = "
-                  << reinterpret_cast<const char*>(&v[i]) - reinterpret_cast<const char*>(&v[i - 1])
+                  << reinterpret_cast<const char*>(&v[i]) -
+                         reinterpret_cast<const char*>(&v[i - 1])
                   << "\n";
     }
 
@@ -32,10 +33,15 @@ int main() {
     const char* base = reinterpret_cast<const char*>(&v[0]);
     const char* computed = base + index * sizeof(int);
 
-    std::cout << "\nbase address        = " << static_cast<const void*>(base) << "\n";
-    std::cout << "base + 3*sizeof(int)= " << static_cast<const void*>(computed) << "\n";
-    std::cout << "&v[3]               = " << static_cast<const void*>(&v[3]) << "\n";
-    std::cout << "same? " << (computed == reinterpret_cast<const char*>(&v[3]) ? "yes" : "no")
+    std::cout << "\nbase address        = " << static_cast<const void*>(base)
+              << "\n";
+    std::cout << "base + 3*sizeof(int)= " << static_cast<const void*>(computed)
+              << "\n";
+    std::cout << "&v[3]               = " << static_cast<const void*>(&v[3])
+              << "\n";
+    std::cout << "same? "
+              << (computed == reinterpret_cast<const char*>(&v[3]) ? "yes"
+                                                                   : "no")
               << "\n";
 
     return 0;

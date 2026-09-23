@@ -17,12 +17,12 @@ The vocabulary everything else is written in.
 - [x] Big-O notation — what it measures and what it ignores
 - [x] Counting operations; growth when `n` doubles
 - [~] Time vs space complexity — stated correctly once, needs repetition
-- [ ] Arrays — memory layout, why indexing is O(1)
+- [x] Arrays — memory layout, why indexing is O(1)
 - [ ] Strings — and why they are not just arrays
 - [ ] Functions, parameters, return values
 - [ ] References (`&`) — pass by value vs pass by reference
 - [ ] Pointers — addresses, dereferencing, `nullptr`
-- [ ] STL: `vector`
+- [~] STL: `vector` — size vs capacity, amortized push_back; API still to cover
 - [ ] STL: `string`
 - [ ] STL: `pair`
 - [ ] STL: `map` vs `unordered_map`
@@ -46,7 +46,7 @@ Where most interview problems actually live.
 - [ ] Frequency counting
 - [ ] Hashing — the idea, then `unordered_map`/`unordered_set`
 - [ ] Two pointers — opposite ends
-- [ ] Two pointers — fast/slow
+- [~] Two pointers — fast/slow — read/write variant done via Move Zeroes
 - [ ] Sliding window — fixed size
 - [ ] Sliding window — variable size
 - [ ] Binary search on a sorted array

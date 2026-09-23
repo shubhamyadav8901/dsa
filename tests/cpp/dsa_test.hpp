@@ -5,9 +5,9 @@
 //
 // Usage in a test file:
 //
-//     #define DSA_TEST                       // hides the solution's playground main()
-//     #include "tests/cpp/dsa_test.hpp"
-//     #include "cpp/arrays/two_sum.cpp"
+//     #define DSA_TEST                       // hides the solution's playground
+//     main() #include "tests/cpp/dsa_test.hpp" #include
+//     "cpp/arrays/two_sum.cpp"
 //
 //     int main() {
 //         CHECK_EQ(twoSum({2, 7, 11, 15}, 9), (std::vector<int>{0, 1}));
@@ -70,7 +70,8 @@ std::string show(const std::vector<T>& v) {
 
 // --- the checks themselves --------------------------------------------------
 inline void record_failure(const std::string& expr, const std::string& actual,
-                           const std::string& expected, const char* file, int line) {
+                           const std::string& expected, const char* file,
+                           int line) {
     ++checks_failed;
     std::cout << "  FAIL  " << expr << "\n"
               << "        expected: " << expected << "\n"
@@ -79,13 +80,15 @@ inline void record_failure(const std::string& expr, const std::string& actual,
 }
 
 template <typename A, typename B>
-void check_eq(const A& actual, const B& expected, const char* expr, const char* file, int line) {
+void check_eq(const A& actual, const B& expected, const char* expr,
+              const char* file, int line) {
     ++checks_run;
     if (actual == expected) return;
     record_failure(expr, show(actual), show(expected), file, line);
 }
 
-inline void check_true(bool condition, const char* expr, const char* file, int line) {
+inline void check_true(bool condition, const char* expr, const char* file,
+                       int line) {
     ++checks_run;
     if (condition) return;
     record_failure(expr, "false", "true", file, line);
@@ -96,16 +99,18 @@ inline int report(const std::string& suite) {
         std::cout << "  PASS  " << suite << "  (" << checks_run << " checks)\n";
         return 0;
     }
-    std::cout << "  FAILED " << suite << "  (" << checks_failed << " of " << checks_run
-              << " checks failed)\n";
+    std::cout << "  FAILED " << suite << "  (" << checks_failed << " of "
+              << checks_run << " checks failed)\n";
     return 1;
 }
 
 }  // namespace dsa
 
-#define CHECK_EQ(actual, expected) \
-    ::dsa::check_eq((actual), (expected), #actual " == " #expected, __FILE__, __LINE__)
-#define CHECK_TRUE(condition) ::dsa::check_true((condition), #condition, __FILE__, __LINE__)
+#define CHECK_EQ(actual, expected)                                            \
+    ::dsa::check_eq((actual), (expected), #actual " == " #expected, __FILE__, \
+                    __LINE__)
+#define CHECK_TRUE(condition) \
+    ::dsa::check_true((condition), #condition, __FILE__, __LINE__)
 #define CHECK_FALSE(condition) \
     ::dsa::check_true(!(condition), "!(" #condition ")", __FILE__, __LINE__)
 #define DSA_REPORT() return ::dsa::report(__FILE__)
