@@ -14,9 +14,9 @@ Each topic maps to a folder: `cpp/<folder>/` for solutions,
 
 The vocabulary everything else is written in.
 
-- [ ] Big-O notation — what it measures and what it ignores
-- [ ] Counting operations; growth when `n` doubles
-- [ ] Time vs space complexity
+- [x] Big-O notation — what it measures and what it ignores
+- [x] Counting operations; growth when `n` doubles
+- [~] Time vs space complexity — stated correctly once, needs repetition
 - [ ] Arrays — memory layout, why indexing is O(1)
 - [ ] Strings — and why they are not just arrays
 - [ ] Functions, parameters, return values
