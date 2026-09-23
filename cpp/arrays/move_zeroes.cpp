@@ -17,9 +17,10 @@ void move_zeroes(std::vector<int>& v) {
     // TODO
     size_t j = 0;
 
-    // increment i until 0
-    // start j from i and increment until non zero
-    // swap -> increment i, increment j until non zero
+    // increment i and j until 0
+    // increment only j until non zero
+    // return on end of vector
+    // swap i and j
     // repeat
 
     for (size_t i = 0; i < v.size() && j < v.size(); i++) {
