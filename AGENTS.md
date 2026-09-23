@@ -103,6 +103,17 @@ A student who can only recite the optimal solution has memorised, not learned.
 - Comments explain *why*, never *what*.
 - No competitive-programming golf, no `#define int long long`, no
   `bits/stdc++.h`, no obscure macros — unless the trick itself is the lesson.
+- **Include what you use.** Every symbol needs its own header, in the file that
+  uses it: `<climits>` for `INT_MIN`, `<algorithm>` for `std::sort` and
+  `std::shuffle`, `<string>` for `std::string`, `<vector>` for `std::vector`.
+  Never rely on one header transitively dragging in another — that is not
+  guaranteed by the standard, and code that compiles here will fail on a
+  different compiler or standard library version. This is the same reason
+  `bits/stdc++.h` is banned: it hides which headers the code actually needs.
+
+  **Flag a missing include every time you review code, including in test
+  files.** Check it explicitly rather than trusting a successful compile — a
+  successful compile is exactly what makes this bug invisible.
 
 ## Rule 7 — Debugging
 
