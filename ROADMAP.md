@@ -25,8 +25,8 @@ The vocabulary everything else is written in.
 - [~] STL: `vector` — size vs capacity, amortized push_back; API still to cover
 - [~] STL: `string` — costs and `+=` vs `+` done; find/substr API still to cover
 - [ ] STL: `pair`
-- [ ] STL: `map` vs `unordered_map`
-- [ ] STL: `set` vs `unordered_set`
+- [~] STL: `map` vs `unordered_map` — unordered side done; ordered `map` not yet
+- [~] STL: `set` vs `unordered_set` — used `set` in a generator; not yet taught
 - [ ] STL: `stack`
 - [ ] STL: `queue`, `deque`
 - [ ] STL: `priority_queue`
@@ -44,7 +44,7 @@ Where most interview problems actually live.
 - [ ] Array traversal patterns
 - [ ] Prefix sums
 - [x] Frequency counting — fixed-size array over a known alphabet
-- [ ] Hashing — the idea, then `unordered_map`/`unordered_set`
+- [x] Hashing — the idea, then `unordered_map`/`unordered_set`
 - [x] Two pointers — opposite ends
 - [~] Two pointers — fast/slow — read/write variant done via Move Zeroes
 - [ ] Sliding window — fixed size
