@@ -3,10 +3,10 @@
 The tutor reads this file at the start of every session to decide what comes
 next. Keep it honest — an inflated tracker produces a useless study plan.
 
-- **Session count:** 5
-- **Current phase:** Phase 0 → Phase 1 (core patterns)
-- **Current topic:** Hashing (done) → next: sliding window — opens with "make Contains Duplicate II use O(k) space"
-- **Last session date:** 2026-09-30
+- **Session count:** 6
+- **Current phase:** Phase 1 — Core Patterns
+- **Current topic:** Sliding window, fixed size (done) → next: variable-size sliding window
+- **Last session date:** 2026-10-06
 
 ---
 
@@ -20,11 +20,13 @@ one.
 
 | # | Problem | Topic | Difficulty | Status | Attempts | Lang | Pattern | Complexity | Notes |
 |---|---------|-------|------------|--------|----------|------|---------|------------|-------|
+| 8 | Contains Duplicate II — sliding-window version | sliding_window | Easy | Solved | 2 | C++ ✓ / Py — / Java — | Fixed-size sliding window over a hash set | O(n) / O(min(n, k)) | Derived the window from "which indices can matter?". First version needed a `k == 0` guard; reordering to insert-then-evict removed it. Avoided the `i - k` unsigned wrap unaided. Run against the map version on all 18 checks, and 400k random cases under ASan. |
 | 7 | [Contains Duplicate II](https://leetcode.com/problems/contains-duplicate-ii/) (LC 219) | hashing | Easy | Solved | 1 | C++ ✓ / Py — / Java — | Hash map value → latest index | O(n) / O(n) | Independent, correct first try — transferred Two Sum's map unaided. Tests pinned the `<=` boundary at scale (k = gap−1, gap, gap+1) and k=0 with adjacent duplicates. Included `<map>` instead of `<unordered_map>`. |
 | 6 | [Two Sum](https://leetcode.com/problems/two-sum/) (LC 1) | hashing | Easy | Solved | 1 | C++ ✓ / Py — / Java — | Hash map complement lookup, check-before-insert | O(n) / O(n) | Guided: derived the complement and the key/value choice step by step. Scale generator guarantees a single pair by construction. One test was outside the constraints (target 2×10⁹); a duplicate-answer test was dropped during a fix and re-added. |
 | 5 | [Valid Palindrome](https://leetcode.com/problems/valid-palindrome/) (LC 125) | strings | Easy | Solved | 2 | C++ ✓ / Py — / Java — | Two pointers, opposite ends, with skip-filtering | O(n) / O(1) | Independent problem. First version read out of bounds on `"a!"`: `size_t end` wrapped past 0. Found and explained it from one hint. Also shipped a check that could not fail (`CHECK_TRUE` on a string literal). Verified on 300k random strings under ASan. |
 | 4 | [Reverse String](https://leetcode.com/problems/reverse-string/) (LC 344) | strings | Easy | Solved | 1 | C++ ✓ / Py — / Java — | Two pointers, opposite ends | O(n) / O(1) | Hand-written `swap_chars(char&, char&)`. By-value experiment failed 4/5 — the n=1 case passed, since reversing one element is a no-op. |
-| 3 | [Valid Anagram](https://leetcode.com/problems/valid-anagram/) (LC 242) | strings | Easy | Solved | 1 | C++ ✓ / Py — / Java — | Hash map for O(1) "have I seen X, and where?" | Two Sum (guided), then transferred unaided to Contains Duplicate II | The brute force's inner loop is *searching for one specific value* (a complement, a repeat). Store what you've seen, keyed by the value you'll look up, mapping to what you need back |
+| 3 | [Valid Anagram](https://leetcode.com/problems/valid-anagram/) (LC 242) | strings | Easy | Solved | 1 | C++ ✓ / Py — / Java — | Sliding window, fixed size | Contains Duplicate II, derived from "which earlier indices can matter for position i?" | "Within distance k", "every window of size k". One element enters and one leaves per step, so update the window's summary in O(1) instead of rebuilding it in O(k) |
+| Hash map for O(1) "have I seen X, and where?" | Two Sum (guided), then transferred unaided to Contains Duplicate II | The brute force's inner loop is *searching for one specific value* (a complement, a repeat). Store what you've seen, keyed by the value you'll look up, mapping to what you need back |
 | Two pointers, opposite ends (converging) | Reverse String, then applied independently to Valid Palindrome | Symmetric comparison or in-place reversal. Pointers start at both ends and move inward; stop when they meet — decide the `<` vs `<=` on purpose |
 | Frequency counting with a fixed-size array | O(n) / O(1) | Correct first try, single count array. Tests included a 50k scale test with fixed seeds. Verified on 400k random pairs vs a sorting reference. |
 | 2 | [Move Zeroes](https://leetcode.com/problems/move-zeroes/) (LC 283) | arrays | Easy | Solved | 2 | C++ ✓ / Py — / Java — | Two pointers (read/write scan) | O(n) / O(1) | Tests written before code, incl. n=1 and INT_MIN. First version was O(n²): `j` was reset per iteration, re-walking the same zeroes. Verified on 300k random arrays vs `stable_partition`. |
@@ -43,8 +45,8 @@ material.
 |---------|----------|------------|--------|
 | Testing complexity, not just correctness | S2: O(n²) passed all tests. S3 and S4: scale tests at the constraint bound, unprompted, every problem | 1 | **Closed** — habit established across three problems |
 | Relying on transitive includes | `<climits>` ×2, `<algorithm>` ×2, `<unordered_map>` ×2 (once replaced by the wrong header, `<map>`) | 6 | Active — enforced in Rule 6, still recurring |
-| Leaving the complexity header as `O(?)` | Valid Palindrome, Two Sum, Contains Duplicate II — filled only when asked | 3 | New — state it before saying `check` |
-| Unsigned arithmetic near zero | S4: crashed on `end--` past 0 the problem after a warning. S5: found both bugs in an Attack drill | 1 | Improving — spotted in others' code; not yet proven in own code |
+| Leaving the complexity header as `O(?)` | Valid Palindrome, Two Sum, Contains Duplicate II; S6 window version needed three asks | 4 | **Active** — the most persistent slip right now |
+| Unsigned arithmetic near zero | S4: crashed on `end--` past 0. S5: found both bugs in an Attack drill. S6: `nums[i - k]` guarded by `i >= k` in own code, unprompted | 1 | **Closed** — proven in own code |
 | Mapping a spotted trigger to the right pattern | S4: swapped two mappings. S5: 4/4 on cold statements, each tied to a solved problem | 1 | **Closing** — one clean pass |
 | Code drifting from the described approach | Described an O(n) monotonic scan, wrote an O(n²) resetting one, and did not notice | 1 | New — re-read the code against the sentence that described it |
 | Choosing test cases that attack your own code | S1: skipped own cases, 3 bugs survived. S2: wrote 6 cases unprompted incl. negatives and INT_MIN, missed only n=1 | 3 | **Improving fast** — keep drilling |
@@ -64,7 +66,8 @@ Recurring errors, so they become checkable habits rather than surprises.
 | Only updating state in one branch | `second` updated solely inside `if (i > largest)` | 1 | Ask: "does every case that *should* change this variable actually reach an assignment?" |
 | Magic sentinel inside the legal value range | `-1`, then `INT_MIN` | 2 | A sentinel must be impossible as real data — otherwise use a flag |
 | Reading only the value constraints, never the size constraint | `1 <= n <= 10^4` means "write a test at scale", and it was skipped | 1 | Size bounds are a performance test. Time it, don't assume it |
-| Stale comments left after a refactor | `// TODO` left in three solution files after the code was written | 3 | Delete the comment in the same edit that invalidates it |
+| Stale comments left after a refactor | `// TODO` in three files; S6: a commented-out `// if (k == 0) return false;` | 4 | Delete the comment in the same edit that invalidates it — commented-out code included |
+| Describing *what* instead of *when* | S2: defined "invariant" when asked for a pattern. S6: described what `const T&`/`T&`/`T`/`T*` do when asked when to use each | 2 | Answer the question asked: a decision question wants a decision |
 | Decrementing an unsigned index past zero | `end--` on a `size_t` holding 0 wrapped to SIZE_MAX, then indexed | 1 | Check `start >= end` *before* moving pointers, or use a signed index when it can go below 0 |
 | A test that asserts something other than the function's result | `CHECK_TRUE("ABCDEedcba")` — a literal is a non-null pointer, always true | 1 | For every test, ask: what bug would make this fail? |
 | Using a symbol without including its header | `INT_MIN` without `<climits>`, `std::shuffle` without `<algorithm>` | 3 | Every symbol needs its own header, every time |
@@ -79,6 +82,7 @@ I had not seen before.
 | Pattern | Recognised on | Trigger — when to reach for it |
 |---------|---------------|--------------------------------|
 | Single-pass running extremum (track best + second-best in variables) | Second Largest — derived unaided, before being shown anything | "Find the best/worst k items" where k is tiny and fixed. Beats sorting: O(n) vs O(n log n) |
+| Sliding window, fixed size | Contains Duplicate II, derived from "which earlier indices can matter for position i?" | "Within distance k", "every window of size k". One element enters and one leaves per step, so update the window's summary in O(1) instead of rebuilding it in O(k) |
 | Hash map for O(1) "have I seen X, and where?" | Two Sum (guided), then transferred unaided to Contains Duplicate II | The brute force's inner loop is *searching for one specific value* (a complement, a repeat). Store what you've seen, keyed by the value you'll look up, mapping to what you need back |
 | Two pointers, opposite ends (converging) | Reverse String, then applied independently to Valid Palindrome | Symmetric comparison or in-place reversal. Pointers start at both ends and move inward; stop when they meet — decide the `<` vs `<=` on purpose |
 | Frequency counting with a fixed-size array | Valid Anagram — approach derived unaided, including the single-array refinement | Counting over a small, known alphabet. `c - 'a'` turns a character into an index, so no hash map is needed and space stays O(1) |
@@ -92,14 +96,12 @@ Scheduled by session number. See the schedule in `AGENTS.md`.
 
 | Item | Drill | Last seen | Due | Why queued |
 |------|-------|-----------|-----|------------|
-| Code that is correct but quadratic | Attack | 3 | 6 | Deferred from S5 (drill budget) |
-| Amortized O(1), and why `s = s + c` is quadratic | Recall | 3 | 6 | Deferred from S5 |
-| Hash table worst case — why O(n), what prevents it | Recall | 5 | 6 | New concept this session |
-| Cold statements → five patterns, now including hashing | Recall (recognition) | 5 | 7 | Passed 4/4; re-check once hashing joins the pool |
-| Move Zeroes → dedupe-sorted-array | Transfer | — | 7 | Confirms the read/write two-pointer generalises |
-| Code that decrements a `size_t` — in their *own* solution | Constraints-to-tests | 5 | 7 | Spotted it in an Attack drill; needs proving in own code |
-| `const T&` vs `T&` vs `T` vs `T*` — when each | Recall | 4 | 6 | New concept this session |
-| Valid Anagram → grouping anagrams, or unicode input | Transfer | — | 6 | Tests whether the fixed-array assumption is understood |
+| Cold statements → six patterns, now including hashing and sliding window | Recall (recognition) | 5 | 7 | The pattern pool grew by two since the last 4/4 |
+| Move Zeroes → dedupe-sorted-array | Transfer | — | 7 | Recognised it in S6's Attack drill; now solve one |
+| `const T&` / `T&` / `T` / `T*` — *when*, not what | Recall | 6 | 7 | Answered with mechanisms instead of decisions |
+| Amortized O(1), and why `s = s + c` is quadratic | Recall | 3 | 8 | Deferred twice; derived twice, likely solid |
+| Valid Anagram → group anagrams (now a hashing problem) | Transfer | — | 8 | Combines frequency counting with a hash map key |
+| Window invariants — what the window holds, why erase-by-value is safe | Recall | 6 | 9 | New pattern; check it survives a few sessions |
 | Second Largest from a blank file | Re-implement | 1 | 13 | Only once memory has actually decayed |
 
 ## Readiness Assessment
@@ -118,7 +120,13 @@ under time pressure. Not to be inflated.
 | Communication | 3 | Terse, accurate answers; asked "what is a sentinel?" instead of bluffing — good instinct |
 | Performance under time pressure | 0 | Not assessed — no timed work yet |
 
-**Overall (S5):** Phase 1 underway. Recognition is the headline: 4/4 on cold
+**Overall (S6):** Sliding window derived rather than taught: two questions
+("which indices can matter?", "what enters and leaves?") and the pattern fell
+out. The unsigned-wrap weakness is now closed in own code. The complexity
+header is the one habit that keeps needing a reminder — it took three asks
+this session, and in an interview that line is the first thing expected.
+
+**Previous (S5):** Phase 1 underway. Recognition is the headline: 4/4 on cold
 statements, and hashing transferred from Two Sum to Contains Duplicate II
 without prompting. Test design keeps getting more deliberate — boundary tests
 at scale, generators that guarantee the problem's own preconditions. The
@@ -145,6 +153,7 @@ thing to drill: the names are landing, the recognition sentences are not.
 
 | # | Date | Topic | Problems | Outcome |
 |---|------|-------|----------|---------|
+| 6 | 2026-10-06 | Sliding window (fixed): which indices matter, enter/leave per step, window invariants, why reordering removed the `k == 0` special case. Function pointers, briefly, to run one test suite against two implementations | Contains Duplicate II, sliding-window version | Solved, O(min(n, k)) space. Refined to drop the special case. Drills: hash worst case right (missed rehashing), quadratic `erase` loop recognised as Move Zeroes. |
 | 5 | 2026-09-30 | Hashing: direct addressing → hash function + buckets, collisions, why table size and key patterns interact, load factor and rehashing, average O(1) vs worst O(n) | Two Sum (LC 1, guided), Contains Duplicate II (LC 219, independent) | Both solved first try. Transfer succeeded unaided. Lesson: a test generator must guarantee the problem's preconditions, or a failure can't be trusted. |
 | 4 | 2026-09-24 | References & pointers: value vs `&` vs `*`, hidden O(n) copies in by-value parameters, `const T&` as the default | Reverse String (LC 344), Valid Palindrome (LC 125, independent) | Both solved, O(n)/O(1). Palindrome crashed on `size_t` wrap-around; found and explained from one hint. Lesson: a test only catches a bug that would change its output. |
 | 3 | 2026-09-24 | Strings: contiguous like vectors, `s = s + c` vs `s += c`, substr/compare costs, `c - 'a'` as an index, immutability in Java/Python | Valid Anagram (LC 242) | Solved first try, O(n)/O(1). Test file used `reserve` and `+=` unprompted, twenty minutes after learning why. |

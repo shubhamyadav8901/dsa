@@ -7,6 +7,7 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
+#include <unordered_set>
 #include <cstddef>
 #include <cmath>
 
@@ -19,6 +20,30 @@ bool contains_nearby_duplicate(const std::vector<int>& nums, int k) {
             return true;
         map[nums[i]] = i;
     }
+    return false;
+}
+
+// Sliding-window version: same answer, but the set never holds more than k
+// values.
+// Time:  O(n)
+// Space: O(k)
+// if k > n then Space: O(n)
+
+bool contains_nearby_duplicate_window(const std::vector<int>& nums, int k) {
+    std::unordered_set<int> window;
+    std::size_t i = 0;
+
+    while (i < static_cast<size_t>(k) && i < nums.size()) {
+        if (window.count(nums[i])) return true;
+        window.insert(nums[i++]);
+    }
+
+    for (i = k; i < nums.size(); i++) {
+        if (window.count(nums[i])) return true;
+        window.insert(nums[i]);
+        window.erase(nums[i - k]);
+    }
+
     return false;
 }
 

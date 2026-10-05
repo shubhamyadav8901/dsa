@@ -47,7 +47,7 @@ Where most interview problems actually live.
 - [x] Hashing — the idea, then `unordered_map`/`unordered_set`
 - [x] Two pointers — opposite ends
 - [~] Two pointers — fast/slow — read/write variant done via Move Zeroes
-- [ ] Sliding window — fixed size
+- [x] Sliding window — fixed size
 - [ ] Sliding window — variable size
 - [ ] Binary search on a sorted array
 - [ ] Binary search on the answer space
