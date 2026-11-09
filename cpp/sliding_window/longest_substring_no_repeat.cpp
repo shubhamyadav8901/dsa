@@ -20,8 +20,8 @@ int length_of_longest_substring(const std::string& s) {
         }
         arr[static_cast<unsigned char>(s[j])] += 1;
 
-        int length_of_set = j - i + 1;
-        if (length_of_set > longest_length) longest_length = length_of_set;
+        int window_length = j - i + 1;
+        if (window_length > longest_length) longest_length = window_length;
     }
     return longest_length;
 }

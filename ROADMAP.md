@@ -48,7 +48,7 @@ Where most interview problems actually live.
 - [x] Two pointers — opposite ends
 - [~] Two pointers — fast/slow — read/write variant done via Move Zeroes
 - [x] Sliding window — fixed size
-- [ ] Sliding window — variable size
+- [x] Sliding window — variable size
 - [ ] Binary search on a sorted array
 - [ ] Binary search on the answer space
 - [ ] Sorting-based techniques
