@@ -42,7 +42,7 @@ and pick the right STL container for a described need without looking it up.
 Where most interview problems actually live.
 
 - [ ] Array traversal patterns
-- [ ] Prefix sums
+- [x] Prefix sums
 - [x] Frequency counting — fixed-size array over a known alphabet
 - [x] Hashing — the idea, then `unordered_map`/`unordered_set`
 - [x] Two pointers — opposite ends

@@ -3,10 +3,10 @@
 The tutor reads this file at the start of every session to decide what comes
 next. Keep it honest — an inflated tracker produces a useless study plan.
 
-- **Session count:** 7
+- **Session count:** 8
 - **Current phase:** Phase 1 — Core Patterns
-- **Current topic:** Sliding window, variable size (done) → next: prefix sums — opens with "209 needed positive numbers; what breaks with negatives?"
-- **Last session date:** 2026-11-09
+- **Current topic:** Prefix sums (done) → next: binary search
+- **Last session date:** 2026-11-12
 
 ---
 
@@ -20,6 +20,9 @@ one.
 
 | # | Problem | Topic | Difficulty | Status | Attempts | Lang | Pattern | Complexity | Notes |
 |---|---------|-------|------------|--------|----------|------|---------|------------|-------|
+| 13 | [Contiguous Array](https://leetcode.com/problems/contiguous-array/) (LC 525) | arrays | Medium | Solved | 1 | C++ ✓ / Py — / Java — | Prefix sum (0 → −1) + map of **first** index | O(n) / O(n) | Independent Medium with Hint 1 only. Chose first-occurrence unaided and explained why overwriting gives the shortest span. Scale test was accidentally 150,000 long (`vector(n)` instead of `reserve`). |
+| 12 | [Subarray Sum Equals K](https://leetcode.com/problems/subarray-sum-equals-k/) (LC 560) | arrays | Medium | Solved | 1 | C++ ✓ / Py — / Java — | Prefix sum + map of **counts**, seeded `{0: 1}` | O(n) / O(n) | Guided. Derived the complement form after a sign slip. Header first said O(1) space; lookup used `[]` (inserting on every miss), then `find` + `[]`, then a single `find`. All-zeros test pins the maximum answer, 200,010,000. |
+| 11 | [Remove Duplicates from Sorted Array](https://leetcode.com/problems/remove-duplicates-from-sorted-array/) (LC 26) | arrays | Easy | Solved | 1 | C++ ✓ / Py — / Java — | Two pointers, same direction (read/write) | O(n) / O(1) | Transfer drill: recognised as Move Zeroes and named the changed keep condition. First version was correct but convoluted (an `else` that did not advance `j`); rewritten as a single loop. Generators first used `random_device` seeds. |
 | 10 | [Minimum Size Subarray Sum](https://leetcode.com/problems/minimum-size-subarray-sum/) (LC 209) | sliding_window | Medium | Solved | 2 | C++ ✓ / Py — / Java — | Variable window, shrink while **valid** | O(n) / O(1) | Independent Medium, correct first try; inverted LC 3's shrink condition unaided. First version used a sentinel equal to a legal answer (100,000), rescued by `<=` plus a flag; replaced with `nums.size() + 1`. Scale test hit three constraint bounds at once. |
 | 9 | [Longest Substring Without Repeating Characters](https://leetcode.com/problems/longest-substring-without-repeating-characters/) (LC 3) | sliding_window | Medium | Solved | 2 | C++ ✓ / Py — / Java — | Variable window, shrink while **invalid** | O(n) / O(1) | First Medium. Derived O(n³) → O(n²) → O(n) step by step. Header first said O(n) space for a fixed 256-slot array; window length recomputed by scanning instead of `j - i + 1`; `unsigned char` cast applied to 2 of 3 index sites before the fix. |
 | 8 | Contains Duplicate II — sliding-window version | sliding_window | Easy | Solved | 2 | C++ ✓ / Py — / Java — | Fixed-size sliding window over a hash set | O(n) / O(min(n, k)) | Derived the window from "which indices can matter?". First version needed a `k == 0` guard; reordering to insert-then-evict removed it. Avoided the `i - k` unsigned wrap unaided. Run against the map version on all 18 checks, and 400k random cases under ASan. |
@@ -27,12 +30,13 @@ one.
 | 6 | [Two Sum](https://leetcode.com/problems/two-sum/) (LC 1) | hashing | Easy | Solved | 1 | C++ ✓ / Py — / Java — | Hash map complement lookup, check-before-insert | O(n) / O(n) | Guided: derived the complement and the key/value choice step by step. Scale generator guarantees a single pair by construction. One test was outside the constraints (target 2×10⁹); a duplicate-answer test was dropped during a fix and re-added. |
 | 5 | [Valid Palindrome](https://leetcode.com/problems/valid-palindrome/) (LC 125) | strings | Easy | Solved | 2 | C++ ✓ / Py — / Java — | Two pointers, opposite ends, with skip-filtering | O(n) / O(1) | Independent problem. First version read out of bounds on `"a!"`: `size_t end` wrapped past 0. Found and explained it from one hint. Also shipped a check that could not fail (`CHECK_TRUE` on a string literal). Verified on 300k random strings under ASan. |
 | 4 | [Reverse String](https://leetcode.com/problems/reverse-string/) (LC 344) | strings | Easy | Solved | 1 | C++ ✓ / Py — / Java — | Two pointers, opposite ends | O(n) / O(1) | Hand-written `swap_chars(char&, char&)`. By-value experiment failed 4/5 — the n=1 case passed, since reversing one element is a no-op. |
-| 3 | [Valid Anagram](https://leetcode.com/problems/valid-anagram/) (LC 242) | strings | Easy | Solved | 1 | C++ ✓ / Py — / Java — | Sliding window, variable size | LC 3 (derived from brute force), then LC 209 unaided with the condition inverted | Contiguous subarray/substring, longest or shortest satisfying a condition. Right edge always advances; left edge advances only as far as it must. O(n) because each index enters and leaves once. Longest → shrink while invalid; shortest → shrink while valid. Needs a condition that is monotonic as the window grows (positive numbers in 209) |
+| 3 | [Valid Anagram](https://leetcode.com/problems/valid-anagram/) (LC 242) | strings | Easy | Solved | 1 | C++ ✓ / Py — / Java — | Prefix sums | LC 560 (guided), then LC 525 independently with a value transform | Subarray sums when a window can't work (negatives break monotonicity). `sum(l..r) = P[r+1] − P[l]`; for "sum equals k", look up `P − k` in a map seeded with the empty prefix. The map's value depends on the goal: count (how many), first index (longest), latest index (closest) |
+| Sliding window, variable size | LC 3 (derived from brute force), then LC 209 unaided with the condition inverted | Contiguous subarray/substring, longest or shortest satisfying a condition. Right edge always advances; left edge advances only as far as it must. O(n) because each index enters and leaves once. Longest → shrink while invalid; shortest → shrink while valid. Needs a condition that is monotonic as the window grows (positive numbers in 209) |
 | Sliding window, fixed size | Contains Duplicate II, derived from "which earlier indices can matter for position i?" | "Within distance k", "every window of size k". One element enters and one leaves per step, so update the window's summary in O(1) instead of rebuilding it in O(k) |
 | Hash map for O(1) "have I seen X, and where?" | Two Sum (guided), then transferred unaided to Contains Duplicate II | The brute force's inner loop is *searching for one specific value* (a complement, a repeat). Store what you've seen, keyed by the value you'll look up, mapping to what you need back |
 | Two pointers, opposite ends (converging) | Reverse String, then applied independently to Valid Palindrome | Symmetric comparison or in-place reversal. Pointers start at both ends and move inward; stop when they meet — decide the `<` vs `<=` on purpose |
 | Frequency counting with a fixed-size array | O(n) / O(1) | Correct first try, single count array. Tests included a 50k scale test with fixed seeds. Verified on 400k random pairs vs a sorting reference. |
-| 2 | [Move Zeroes](https://leetcode.com/problems/move-zeroes/) (LC 283) | arrays | Easy | Solved | 2 | C++ ✓ / Py — / Java — | Two pointers (read/write scan) | O(n) / O(1) | Tests written before code, incl. n=1 and INT_MIN. First version was O(n²): `j` was reset per iteration, re-walking the same zeroes. Verified on 300k random arrays vs `stable_partition`. |
+| 2 | [Move Zeroes](https://leetcode.com/problems/move-zeroes/) (LC 283) | arrays | Easy | **Mastered** | 2 | C++ ✓ / Py — / Java — | Two pointers (read/write scan) | O(n) / O(1) | Tests written before code, incl. n=1 and INT_MIN. First version was O(n²): `j` was reset per iteration, re-walking the same zeroes. Verified on 300k random arrays vs `stable_partition`. **Mastered S8** via transfer to LC 26. |
 | 1 | Second Largest (drill) | basics | Easy | Solved | 4 | C++ ✓ / Py — / Java — | Single-pass running extremum | O(n) / O(1) | Correct on 200k random differential test. Reached the algorithm unaided; all 3 bugs were untested input regions, not logic slips. |
 
 Lang column format: `C++ ✓ / Py — / Java —`
@@ -47,9 +51,10 @@ material.
 | Concept | Evidence | Times seen | Status |
 |---------|----------|------------|--------|
 | Testing complexity, not just correctness | S2: O(n²) passed all tests. S3 and S4: scale tests at the constraint bound, unprompted, every problem | 1 | **Closed** — habit established across three problems |
-| Relying on transitive includes | `<climits>` ×2, `<algorithm>` ×2, `<unordered_map>` ×2 (once the wrong header, `<map>`), `<vector>` ×2 (S7, once in a test file) | 8 | Active — enforced in Rule 6, still recurring every session |
+| Relying on transitive includes | `<climits>` ×2, `<algorithm>` ×3, `<unordered_map>` ×3 (once `<map>` instead), `<vector>` ×2 | 10 | Active — though LC 525 was the first fully clean file in a while |
 | Hedging between two patterns | S7 recognition: answered (b) and (d) with "fixed array / hash" | 1 | New — commit to one, name the deciding constraint (is the key range small and known?) |
-| Leaving the complexity header as `O(?)` | Four problems filled only when asked. S7: filled before `check` on both problems — one value wrong (O(n) space for a fixed array) | 4 | **Improving** — the habit landed; accuracy next |
+| Leaving the complexity header as `O(?)` | Four problems filled only when asked. S7 and S8: filled before `check` every time | 4 | **Closed** — habit established across five problems |
+| Space complexity of auxiliary structures | S7: O(n) for a fixed 256-slot array. S8: O(1) for a map that grows to n + 1 entries | 2 | **New — active.** Ask: does this structure's size depend on n? |
 | Unsigned arithmetic near zero | S4: crashed on `end--` past 0. S5: found both bugs in an Attack drill. S6: `nums[i - k]` guarded by `i >= k` in own code, unprompted | 1 | **Closed** — proven in own code |
 | Mapping a spotted trigger to the right pattern | S4: swapped two mappings. S5: 4/4 on cold statements, each tied to a solved problem | 1 | **Closing** — one clean pass |
 | Code drifting from the described approach | Described an O(n) monotonic scan, wrote an O(n²) resetting one, and did not notice | 1 | New — re-read the code against the sentence that described it |
@@ -69,6 +74,8 @@ Recurring errors, so they become checkable habits rather than surprises.
 | Fixing before reproducing | Fixed the code without first committing a red test | 2 | Red test, then fix. Always that order |
 | Only updating state in one branch | `second` updated solely inside `if (i > largest)` | 1 | Ask: "does every case that *should* change this variable actually reach an assignment?" |
 | Magic sentinel inside the legal value range | S1: `-1`, then `INT_MIN`. S7: `result = 100'000`, itself a legal answer | 3 | A sentinel must be impossible as real data — derive it from the input (`n + 1`) or use a flag. Two patches covering for each other is the tell |
+| Non-deterministic test data | S8: generators seeded with `std::random_device` — a failure could not be reproduced | 1 | Fixed seeds, passed as parameters. Sessions 3–6 did this right |
+| Constructing a vector with a size when meaning to reserve | S8: `std::vector<int> v(n)` then `insert`, giving n extra zeros and a test outside the constraints | 1 | `vector(n)` creates n elements; `reserve(n)` creates none. Assert the size of generated input |
 | A fix applied to some sites but not all | S7: `unsigned char` cast on 2 of 3 `arr[...]` indexes | 1 | Apply a fix by searching for every site, or read the value once into a correctly typed variable |
 | Reading only the value constraints, never the size constraint | `1 <= n <= 10^4` means "write a test at scale", and it was skipped | 1 | Size bounds are a performance test. Time it, don't assume it |
 | Stale comments left after a refactor | `// TODO` in three files; S6: a commented-out `// if (k == 0) return false;` | 4 | Delete the comment in the same edit that invalidates it — commented-out code included |
@@ -87,6 +94,7 @@ I had not seen before.
 | Pattern | Recognised on | Trigger — when to reach for it |
 |---------|---------------|--------------------------------|
 | Single-pass running extremum (track best + second-best in variables) | Second Largest — derived unaided, before being shown anything | "Find the best/worst k items" where k is tiny and fixed. Beats sorting: O(n) vs O(n log n) |
+| Prefix sums | LC 560 (guided), then LC 525 independently with a value transform | Subarray sums when a window can't work (negatives break monotonicity). `sum(l..r) = P[r+1] − P[l]`; for "sum equals k", look up `P − k` in a map seeded with the empty prefix. The map's value depends on the goal: count (how many), first index (longest), latest index (closest) |
 | Sliding window, variable size | LC 3 (derived from brute force), then LC 209 unaided with the condition inverted | Contiguous subarray/substring, longest or shortest satisfying a condition. Right edge always advances; left edge advances only as far as it must. O(n) because each index enters and leaves once. Longest → shrink while invalid; shortest → shrink while valid. Needs a condition that is monotonic as the window grows (positive numbers in 209) |
 | Sliding window, fixed size | Contains Duplicate II, derived from "which earlier indices can matter for position i?" | "Within distance k", "every window of size k". One element enters and one leaves per step, so update the window's summary in O(1) instead of rebuilding it in O(k) |
 | Hash map for O(1) "have I seen X, and where?" | Two Sum (guided), then transferred unaided to Contains Duplicate II | The brute force's inner loop is *searching for one specific value* (a complement, a repeat). Store what you've seen, keyed by the value you'll look up, mapping to what you need back |
@@ -102,12 +110,12 @@ Scheduled by session number. See the schedule in `AGENTS.md`.
 
 | Item | Drill | Last seen | Due | Why queued |
 |------|-------|-----------|-----|------------|
-| Move Zeroes → dedupe-sorted-array | Transfer | — | **8 — opens the session** | Deferred twice; promised as the first thing in S8 |
-| Amortized analysis — why a `while` inside a `for` can still be O(n) | Recall | 7 | 8 | First answer ("bounded by j") gave O(n²); needed the "total moves of i" nudge |
-| Cold statements, including fixed-array vs hash decisions | Recall (recognition) | 7 | 9 | Hedged on two; check the key-range rule stuck |
-| Valid Anagram → group anagrams (now a hashing problem) | Transfer | — | 9 | Combines frequency counting with a hash map key |
-| Sentinel inside the legal range | Attack | 7 | 9 | Third occurrence across sessions |
-| Window invariants — what the window holds, why erase-by-value is safe | Recall | 6 | 9 | Check it survives a few sessions |
+| Space of auxiliary structures — "does it grow with n?" | Attack | 8 | 9 | Two wrong space values in two sessions, in opposite directions |
+| Cold statements, including fixed-array vs hash decisions | Recall (recognition) | 7 | 9 | Hedged on two last time; check the key-range rule stuck |
+| Valid Anagram → group anagrams | Transfer | — | 9 | Combines frequency counting with a hash map key |
+| What the map stores: latest index / count / first index | Recall | 8 | 10 | Chose right unaided in S8; check it survives |
+| Sentinel inside the legal range | Attack | 7 | 10 | Third occurrence across sessions |
+| Window invariants — what the window holds, why erase-by-value is safe | Recall | 6 | 10 | Check it survives |
 | Second Largest from a blank file | Re-implement | 1 | 13 | Only once memory has actually decayed |
 
 ## Readiness Assessment
@@ -126,7 +134,16 @@ under time pressure. Not to be inflated.
 | Communication | 3 | Terse, accurate answers; asked "what is a sentinel?" instead of bluffing — good instinct |
 | Performance under time pressure | 0 | Not assessed — no timed work yet |
 
-**Overall (S7):** First two Mediums, one fully independent and correct first
+**Overall (S8):** First Mastered problem (Move Zeroes, via transfer).
+Prefix sums landed in one session: the monotonicity argument for why a window
+fails, the complement form on prefix sums, and an independent Medium solved
+with one hint — including choosing first-occurrence over latest without help
+and explaining the difference. The complexity header is now a settled habit.
+The new weakness is the *value* of space complexity for auxiliary structures,
+wrong twice in opposite directions. Test hygiene slipped twice (non-fixed
+seeds, a vector constructed with a size) after being solid for several sessions.
+
+**Previous (S7):** First two Mediums, one fully independent and correct first
 try. The variable window was derived from brute force through three ladder
 steps, and the shrink condition was inverted for LC 209 without a hint — that
 is pattern understanding, not recall. The complexity header is now written
@@ -167,6 +184,7 @@ thing to drill: the names are landing, the recognition sentences are not.
 
 | # | Date | Topic | Problems | Outcome |
 |---|------|-------|----------|---------|
+| 8 | 2026-11-12 | Prefix sums: why negatives break the window (monotonicity), `P[r+1] − P[l]`, complement lookup on prefix sums, the empty-prefix entry, what the map should store | LC 26 (transfer), LC 560 (guided), LC 525 (independent, Hint 1) | All solved. Move Zeroes → Mastered. Drills: amortized argument correct. Lesson: the map's value (count / first / latest) follows from what is being optimised. |
 | 7 | 2026-11-09 | Sliding window (variable): grow right, shrink left; amortized O(n) for a `while` inside a `for`; longest-vs-shortest shrink conditions | LC 3 (guided, first Medium), LC 209 (independent Medium) | Both solved. Lesson: a sentinel equal to a legal answer needs two patches to work — remove the collision and both disappear. Drills: 4/4 on parameter-type decisions; hedged two recognition answers. |
 | 6 | 2026-10-06 | Sliding window (fixed): which indices matter, enter/leave per step, window invariants, why reordering removed the `k == 0` special case. Function pointers, briefly, to run one test suite against two implementations | Contains Duplicate II, sliding-window version | Solved, O(min(n, k)) space. Refined to drop the special case. Drills: hash worst case right (missed rehashing), quadratic `erase` loop recognised as Move Zeroes. |
 | 5 | 2026-09-30 | Hashing: direct addressing → hash function + buckets, collisions, why table size and key patterns interact, load factor and rehashing, average O(1) vs worst O(n) | Two Sum (LC 1, guided), Contains Duplicate II (LC 219, independent) | Both solved first try. Transfer succeeded unaided. Lesson: a test generator must guarantee the problem's preconditions, or a failure can't be trusted. |
