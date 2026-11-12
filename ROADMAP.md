@@ -49,7 +49,7 @@ Where most interview problems actually live.
 - [~] Two pointers — fast/slow — read/write variant done via Move Zeroes
 - [x] Sliding window — fixed size
 - [x] Sliding window — variable size
-- [ ] Binary search on a sorted array
+- [x] Binary search on a sorted array
 - [ ] Binary search on the answer space
 - [ ] Sorting-based techniques
 - [ ] String manipulation patterns
