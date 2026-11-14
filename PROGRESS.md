@@ -3,10 +3,10 @@
 The tutor reads this file at the start of every session to decide what comes
 next. Keep it honest — an inflated tracker produces a useless study plan.
 
-- **Session count:** 9
+- **Session count:** 10
 - **Current phase:** Phase 1 — Core Patterns
-- **Current topic:** Binary search on a sorted array (done) → next: binary search on the answer space. Session 10 opens with the Group Anagrams transfer
-- **Last session date:** 2026-11-13
+- **Current topic:** Binary search on the answer space (done) → next: sorting-based techniques with custom comparators
+- **Last session date:** 2026-11-15
 
 ---
 
@@ -20,6 +20,9 @@ one.
 
 | # | Problem | Topic | Difficulty | Status | Attempts | Lang | Pattern | Complexity | Notes |
 |---|---------|-------|------------|--------|----------|------|---------|------------|-------|
+| 18 | [Koko Eating Bananas](https://leetcode.com/problems/koko-eating-bananas/) (LC 875) | binary_search | Medium | Solved | 1 | C++ ✓ / Py — / Java — | Binary search on the answer space — **first** true | O(n log m) / O(1) | Independent, no hints; returned `lo` as the mirror of Sqrt(x)'s `hi`. `int hours` fits only because the search never tries speeds far below the answer; justified it with the wrong reason (division) before switching to `long long`. |
+| 17 | [Sqrt(x)](https://leetcode.com/problems/sqrtx/) (LC 69) | binary_search | Easy | Solved | 1 | C++ ✓ / Py — / Java — | Binary search on the answer space — **last** true | O(log x) / O(1) | Guided. Anticipated the `mid * mid` overflow; used `long` (4 bytes on Windows) before `long long`. Header left as `O(?)`. A 21.5M-iteration loop made the suite slow; a range above the last square could not catch an off-by-one. Final tests: every x to 10⁶, r² ± 1 up to 46,340. |
+| 16 | [Group Anagrams](https://leetcode.com/problems/group-anagrams/) (LC 49) | hashing | Medium | Solved | 1 | C++ ✓ / Py — / Java — | Canonical key (letter counts) + hash map | O(nk) / O(nk) | Transfer drill combining Valid Anagram and Two Sum, no hints. Count-signature key with letters as separators, O(k) per string. Copied each string by value in the loop at first. |
 | 15 | [Search Insert Position](https://leetcode.com/problems/search-insert-position/) (LC 35) | binary_search | Easy | Solved | 1 | C++ ✓ / Py — / Java — | Binary search; `lo` at exit is the insertion point | O(log n) / O(1) | Independent, no hints. Used the overflow-safe midpoint unprompted. Explained via the invariant why `lo` is the insertion point. Header first said O(n) time; first scale loop only exercised the found path — replaced with a search of every gap. |
 | 14 | [Binary Search](https://leetcode.com/problems/binary-search/) (LC 704) | binary_search | Easy | Solved | 1 | C++ ✓ / Py — / Java — | Binary search, inclusive `[lo, hi]` | O(log n) / O(1) | Derived the invariant, `mid + 1` and `lo <= hi` from the guessing game. Chose signed `lo`/`hi` and explained why `size_t` wraps. Tests mapped every target position; some used ±10,000 under a strict `<` constraint. Every-element loop added. |
 | 13 | [Contiguous Array](https://leetcode.com/problems/contiguous-array/) (LC 525) | arrays | Medium | Solved | 1 | C++ ✓ / Py — / Java — | Prefix sum (0 → −1) + map of **first** index | O(n) / O(n) | Independent Medium with Hint 1 only. Chose first-occurrence unaided and explained why overwriting gives the shortest span. Scale test was accidentally 150,000 long (`vector(n)` instead of `reserve`). |
@@ -32,13 +35,14 @@ one.
 | 6 | [Two Sum](https://leetcode.com/problems/two-sum/) (LC 1) | hashing | Easy | Solved | 1 | C++ ✓ / Py — / Java — | Hash map complement lookup, check-before-insert | O(n) / O(n) | Guided: derived the complement and the key/value choice step by step. Scale generator guarantees a single pair by construction. One test was outside the constraints (target 2×10⁹); a duplicate-answer test was dropped during a fix and re-added. |
 | 5 | [Valid Palindrome](https://leetcode.com/problems/valid-palindrome/) (LC 125) | strings | Easy | Solved | 2 | C++ ✓ / Py — / Java — | Two pointers, opposite ends, with skip-filtering | O(n) / O(1) | Independent problem. First version read out of bounds on `"a!"`: `size_t end` wrapped past 0. Found and explained it from one hint. Also shipped a check that could not fail (`CHECK_TRUE` on a string literal). Verified on 300k random strings under ASan. |
 | 4 | [Reverse String](https://leetcode.com/problems/reverse-string/) (LC 344) | strings | Easy | Solved | 1 | C++ ✓ / Py — / Java — | Two pointers, opposite ends | O(n) / O(1) | Hand-written `swap_chars(char&, char&)`. By-value experiment failed 4/5 — the n=1 case passed, since reversing one element is a no-op. |
-| 3 | [Valid Anagram](https://leetcode.com/problems/valid-anagram/) (LC 242) | strings | Easy | Solved | 1 | C++ ✓ / Py — / Java — | Binary search on a sorted array | LC 704 (guided from a guessing game), LC 35 independently | Sorted/monotonic data and a "where is X?" question. Invariant: the target, if present, is in `[lo, hi]`. Loop `while lo <= hi`, step past `mid`. At exit `lo = hi + 1` is the insertion point. Signed indices; `lo + (hi − lo) / 2` |
+| 3 | [Valid Anagram](https://leetcode.com/problems/valid-anagram/) (LC 242) | strings | Easy | **Mastered** | 1 | C++ ✓ / Py — / Java — | Binary search on the answer space | Sqrt(x) guided from "write out ok(0), ok(1), …", then Koko independently | No sorted array, but a yes/no question about a candidate answer that flips exactly once (T…TF…F or F…FT…T). Search the range of answers; return `hi` for the last T, `lo` for the first T. Watch the type of whatever the predicate computes |
+| Binary search on a sorted array | LC 704 (guided from a guessing game), LC 35 independently | Sorted/monotonic data and a "where is X?" question. Invariant: the target, if present, is in `[lo, hi]`. Loop `while lo <= hi`, step past `mid`. At exit `lo = hi + 1` is the insertion point. Signed indices; `lo + (hi − lo) / 2` |
 | Prefix sums | LC 560 (guided), then LC 525 independently with a value transform | Subarray sums when a window can't work (negatives break monotonicity). `sum(l..r) = P[r+1] − P[l]`; for "sum equals k", look up `P − k` in a map seeded with the empty prefix. The map's value depends on the goal: count (how many), first index (longest), latest index (closest) |
 | Sliding window, variable size | LC 3 (derived from brute force), then LC 209 unaided with the condition inverted | Contiguous subarray/substring, longest or shortest satisfying a condition. Right edge always advances; left edge advances only as far as it must. O(n) because each index enters and leaves once. Longest → shrink while invalid; shortest → shrink while valid. Needs a condition that is monotonic as the window grows (positive numbers in 209) |
 | Sliding window, fixed size | Contains Duplicate II, derived from "which earlier indices can matter for position i?" | "Within distance k", "every window of size k". One element enters and one leaves per step, so update the window's summary in O(1) instead of rebuilding it in O(k) |
 | Hash map for O(1) "have I seen X, and where?" | Two Sum (guided), then transferred unaided to Contains Duplicate II | The brute force's inner loop is *searching for one specific value* (a complement, a repeat). Store what you've seen, keyed by the value you'll look up, mapping to what you need back |
 | Two pointers, opposite ends (converging) | Reverse String, then applied independently to Valid Palindrome | Symmetric comparison or in-place reversal. Pointers start at both ends and move inward; stop when they meet — decide the `<` vs `<=` on purpose |
-| Frequency counting with a fixed-size array | O(n) / O(1) | Correct first try, single count array. Tests included a 50k scale test with fixed seeds. Verified on 400k random pairs vs a sorting reference. |
+| Frequency counting with a fixed-size array | O(n) / O(1) | Correct first try, single count array. Tests included a 50k scale test with fixed seeds. Verified on 400k random pairs vs a sorting reference. **Mastered S10** via transfer to LC 49. |
 | 2 | [Move Zeroes](https://leetcode.com/problems/move-zeroes/) (LC 283) | arrays | Easy | **Mastered** | 2 | C++ ✓ / Py — / Java — | Two pointers (read/write scan) | O(n) / O(1) | Tests written before code, incl. n=1 and INT_MIN. First version was O(n²): `j` was reset per iteration, re-walking the same zeroes. Verified on 300k random arrays vs `stable_partition`. **Mastered S8** via transfer to LC 26. |
 | 1 | Second Largest (drill) | basics | Easy | Solved | 4 | C++ ✓ / Py — / Java — | Single-pass running extremum | O(n) / O(1) | Correct on 200k random differential test. Reached the algorithm unaided; all 3 bugs were untested input regions, not logic slips. |
 
@@ -54,7 +58,10 @@ material.
 | Concept | Evidence | Times seen | Status |
 |---------|----------|------------|--------|
 | Testing complexity, not just correctness | S2: O(n²) passed all tests. S3 and S4: scale tests at the constraint bound, unprompted, every problem | 1 | **Closed** — habit established across three problems |
-| Relying on transitive includes | `<climits>` ×2, `<algorithm>` ×4, `<unordered_map>` ×3 (once `<map>` instead), `<vector>` ×2 | 11 | Active — solution files are now usually clean; test files are where it recurs |
+| Relying on transitive includes | `<climits>` ×3, `<algorithm>` ×5, `<unordered_map>` ×3 (once `<map>` instead), `<vector>` ×2, `<cmath>` ×1 | 14 | Active — at least one per session, every session |
+| Integer type widths | S10: `long` used twice for 64-bit arithmetic; it is 4 bytes on Windows | 2 | New — use `long long` (or `int64_t`) whenever the value needs 64 bits |
+| Tests that cannot fail for the bug they target | S9: every-element loop never reached `return lo`. S10: a range above the last perfect square, every answer identical | 2 | Active — for each test, name the bug that would make it fail |
+| Right conclusion, wrong reason | S10: "Koko's int is safe because we divide first" — division bounds each term, not the total | 1 | New — check the reason against a counterexample (k = 1) |
 | Tests outside the constraints | S5: target 2×10⁹. S8: a 150,000-element vector. S9: ±10,000 under a strict `<` | 3 | Active — check `<` vs `<=` when turning a bound into a test |
 | Hedging between two patterns | S7: answered two with "fixed array / hash". S9: one answer each | 1 | **Closed** |
 | Leaving the complexity header as `O(?)` | Four problems filled only when asked. S7 and S8: filled before `check` every time | 4 | **Closed** — habit established across five problems |
@@ -83,7 +90,7 @@ Recurring errors, so they become checkable habits rather than surprises.
 | A fix applied to some sites but not all | S7: `unsigned char` cast on 2 of 3 `arr[...]` indexes | 1 | Apply a fix by searching for every site, or read the value once into a correctly typed variable |
 | Reading only the value constraints, never the size constraint | `1 <= n <= 10^4` means "write a test at scale", and it was skipped | 1 | Size bounds are a performance test. Time it, don't assume it |
 | Stale comments left after a refactor | `// TODO` in three files; S6: a commented-out `// if (k == 0) return false;` | 4 | Delete the comment in the same edit that invalidates it — commented-out code included |
-| Describing *what* instead of *when* | S2: defined "invariant" when asked for a pattern. S6: described what `const T&`/`T&`/`T`/`T*` do when asked when to use each | 2 | Answer the question asked: a decision question wants a decision |
+| Answering *what* when asked *why* | S2, S6, then S10 twice: listed what each map stored without why; said `hi` holds the answer without why | 4 | Active — when a question says "why", the answer needs "because" |
 | Decrementing an unsigned index past zero | `end--` on a `size_t` holding 0 wrapped to SIZE_MAX, then indexed | 1 | Check `start >= end` *before* moving pointers, or use a signed index when it can go below 0 |
 | A test that asserts something other than the function's result | `CHECK_TRUE("ABCDEedcba")` — a literal is a non-null pointer, always true | 1 | For every test, ask: what bug would make this fail? |
 | Using a symbol without including its header | `INT_MIN` without `<climits>`, `std::shuffle` without `<algorithm>` | 3 | Every symbol needs its own header, every time |
@@ -98,6 +105,7 @@ I had not seen before.
 | Pattern | Recognised on | Trigger — when to reach for it |
 |---------|---------------|--------------------------------|
 | Single-pass running extremum (track best + second-best in variables) | Second Largest — derived unaided, before being shown anything | "Find the best/worst k items" where k is tiny and fixed. Beats sorting: O(n) vs O(n log n) |
+| Binary search on the answer space | Sqrt(x) guided from "write out ok(0), ok(1), …", then Koko independently | No sorted array, but a yes/no question about a candidate answer that flips exactly once (T…TF…F or F…FT…T). Search the range of answers; return `hi` for the last T, `lo` for the first T. Watch the type of whatever the predicate computes |
 | Binary search on a sorted array | LC 704 (guided from a guessing game), LC 35 independently | Sorted/monotonic data and a "where is X?" question. Invariant: the target, if present, is in `[lo, hi]`. Loop `while lo <= hi`, step past `mid`. At exit `lo = hi + 1` is the insertion point. Signed indices; `lo + (hi − lo) / 2` |
 | Prefix sums | LC 560 (guided), then LC 525 independently with a value transform | Subarray sums when a window can't work (negatives break monotonicity). `sum(l..r) = P[r+1] − P[l]`; for "sum equals k", look up `P − k` in a map seeded with the empty prefix. The map's value depends on the goal: count (how many), first index (longest), latest index (closest) |
 | Sliding window, variable size | LC 3 (derived from brute force), then LC 209 unaided with the condition inverted | Contiguous subarray/substring, longest or shortest satisfying a condition. Right edge always advances; left edge advances only as far as it must. O(n) because each index enters and leaves once. Longest → shrink while invalid; shortest → shrink while valid. Needs a condition that is monotonic as the window grows (positive numbers in 209) |
@@ -115,11 +123,11 @@ Scheduled by session number. See the schedule in `AGENTS.md`.
 
 | Item | Drill | Last seen | Due | Why queued |
 |------|-------|-----------|-----|------------|
-| Valid Anagram → group anagrams | Transfer | — | **10 — opens the session** | Deferred repeatedly; promised as the first thing in S10 |
-| What the map stores: latest index / count / first index | Recall | 8 | 10 | Chose right unaided in S8; check it survives |
-| Sentinel inside the legal range | Attack | 7 | 10 | Third occurrence across sessions |
-| Binary search boundaries: why `mid + 1`, why `<=`, what `lo` means at exit | Recall | 9 | 11 | New pattern; boundaries are where it breaks |
+| Binary search boundaries: why `mid + 1`, why `<=`, which of `lo`/`hi` at exit, and why | Recall | 10 | 11 | Two "which, not why" answers this session |
+| Sentinel inside the legal range | Attack | 7 | 11 | Deferred from S10 |
 | Window invariants — what the window holds, why erase-by-value is safe | Recall | 6 | 11 | Check it survives |
+| A test that can't fail for its bug — spot it | Attack | 10 | 12 | Twice in two sessions |
+| Recognise a monotonic yes/no question in a cold statement | Recall (recognition) | 10 | 12 | New pattern |
 | Second Largest from a blank file | Re-implement | 1 | 13 | Only once memory has actually decayed |
 
 ## Readiness Assessment
@@ -138,7 +146,15 @@ under time pressure. Not to be inflated.
 | Communication | 3 | Terse, accurate answers; asked "what is a sentinel?" instead of bluffing — good instinct |
 | Performance under time pressure | 0 | Not assessed — no timed work yet |
 
-**Overall (S9):** Binary search derived from a guessing game in a few
+**Overall (S10):** Second Mastered (Valid Anagram, via Group Anagrams).
+Binary search on the answer space landed fast: the T…TF…F picture was derived
+in one question, and Koko — an independent Medium — was solved with the
+correct mirror boundary. Reasoning is ahead of rigour: the conclusion was
+right but the justification wrong (Koko's overflow), two "why" questions were
+answered with "what", and test edge-cases needed shaping twice (a slow suite,
+a range that could not fail). Includes still slip every session.
+
+**Previous (S9):** Binary search derived from a guessing game in a few
 questions, including the boundary decisions that usually cause bugs. LC 35 was
 solved independently and the exit condition explained from the invariant.
 Hedging is closed; the space drill went 4/4. What still slips is mechanical and
@@ -195,6 +211,7 @@ thing to drill: the names are landing, the recognition sentences are not.
 
 | # | Date | Topic | Problems | Outcome |
 |---|------|-------|----------|---------|
+| 10 | 2026-11-15 | Binary search on the answer space: monotonic predicates, first T vs last T, returning `lo` or `hi`, overflow in the predicate, `long` vs `long long` | LC 49 (transfer), LC 69 (guided), LC 875 (independent) | All solved. Valid Anagram → Mastered. Lessons: a test must be able to fail for the bug it targets; a slow suite stops getting run; check a reason against a counterexample. |
 | 9 | 2026-11-13 | Binary search: log₂ n from halving, sortedness as monotonicity, the inclusive invariant, `mid + 1` and `lo <= hi`, signed indices, overflow-safe midpoint, `lo` as the insertion point | LC 704 (guided), LC 35 (independent) | Both solved. Lesson: a scale test that only exercises one code path can't catch bugs in the other — search every gap, not just every element. Drills: space 4/4, recognition committed to one answer each. |
 | 8 | 2026-11-12 | Prefix sums: why negatives break the window (monotonicity), `P[r+1] − P[l]`, complement lookup on prefix sums, the empty-prefix entry, what the map should store | LC 26 (transfer), LC 560 (guided), LC 525 (independent, Hint 1) | All solved. Move Zeroes → Mastered. Drills: amortized argument correct. Lesson: the map's value (count / first / latest) follows from what is being optimised. |
 | 7 | 2026-11-09 | Sliding window (variable): grow right, shrink left; amortized O(n) for a `while` inside a `for`; longest-vs-shortest shrink conditions | LC 3 (guided, first Medium), LC 209 (independent Medium) | Both solved. Lesson: a sentinel equal to a legal answer needs two patches to work — remove the collision and both disappear. Drills: 4/4 on parameter-type decisions; hedged two recognition answers. |

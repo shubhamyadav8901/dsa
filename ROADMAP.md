@@ -50,7 +50,7 @@ Where most interview problems actually live.
 - [x] Sliding window — fixed size
 - [x] Sliding window — variable size
 - [x] Binary search on a sorted array
-- [ ] Binary search on the answer space
+- [x] Binary search on the answer space
 - [ ] Sorting-based techniques
 - [ ] String manipulation patterns
 
