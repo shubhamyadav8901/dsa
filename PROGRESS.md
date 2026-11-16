@@ -3,10 +3,10 @@
 The tutor reads this file at the start of every session to decide what comes
 next. Keep it honest — an inflated tracker produces a useless study plan.
 
-- **Session count:** 10
+- **Session count:** 11
 - **Current phase:** Phase 1 — Core Patterns
-- **Current topic:** Binary search on the answer space (done) → next: sorting-based techniques with custom comparators
-- **Last session date:** 2026-11-15
+- **Current topic:** Sorting with custom comparators (done) → next: string manipulation patterns (last Phase 1 item), then the Phase 0 STL gaps (`pair`, ordered `map`/`set`)
+- **Last session date:** 2026-11-16
 
 ---
 
@@ -20,6 +20,8 @@ one.
 
 | # | Problem | Topic | Difficulty | Status | Attempts | Lang | Pattern | Complexity | Notes |
 |---|---------|-------|------------|--------|----------|------|---------|------------|-------|
+| 20 | [Sort Array by Increasing Frequency](https://leetcode.com/problems/sort-array-by-increasing-frequency/) (LC 1636) | arrays | Easy | Solved | 1 | C++ ✓ / Py — / Java — | Count, then sort with a capturing multi-key comparator | O(n log n) / O(n) | Independent, no hints. Chose a 201-slot offset array over a hash map from the constraints. Magic `100`/`201` named on request. Length-100 test was all one value (could not fail for any ordering bug); replaced with both extremes at a tied frequency. Header said O(1) space for a copied input; corrected, reason given when asked. |
+| 19 | [Merge Intervals](https://leetcode.com/problems/merge-intervals/) (LC 56) | arrays | Medium | Solved | 1 | C++ ✓ / Py — / Java — | Sort by start, then one sweep with a current block | O(n log n) / O(n) | Guided. Wrote the overlap test with `\|\|` instead of `&&`; fixed from one counterexample. `max` for the end derived unaided. Comparator took vectors by value (copies per comparison). The asked-for test that fails without `max` was missing — a mutation passed all 11 checks. Dropped an unneeded end tie-breaker; the *why* took a second ask. |
 | 18 | [Koko Eating Bananas](https://leetcode.com/problems/koko-eating-bananas/) (LC 875) | binary_search | Medium | Solved | 1 | C++ ✓ / Py — / Java — | Binary search on the answer space — **first** true | O(n log m) / O(1) | Independent, no hints; returned `lo` as the mirror of Sqrt(x)'s `hi`. `int hours` fits only because the search never tries speeds far below the answer; justified it with the wrong reason (division) before switching to `long long`. |
 | 17 | [Sqrt(x)](https://leetcode.com/problems/sqrtx/) (LC 69) | binary_search | Easy | Solved | 1 | C++ ✓ / Py — / Java — | Binary search on the answer space — **last** true | O(log x) / O(1) | Guided. Anticipated the `mid * mid` overflow; used `long` (4 bytes on Windows) before `long long`. Header left as `O(?)`. A 21.5M-iteration loop made the suite slow; a range above the last square could not catch an off-by-one. Final tests: every x to 10⁶, r² ± 1 up to 46,340. |
 | 16 | [Group Anagrams](https://leetcode.com/problems/group-anagrams/) (LC 49) | hashing | Medium | Solved | 1 | C++ ✓ / Py — / Java — | Canonical key (letter counts) + hash map | O(nk) / O(nk) | Transfer drill combining Valid Anagram and Two Sum, no hints. Count-signature key with letters as separators, O(k) per string. Copied each string by value in the loop at first. |
@@ -58,19 +60,19 @@ material.
 | Concept | Evidence | Times seen | Status |
 |---------|----------|------------|--------|
 | Testing complexity, not just correctness | S2: O(n²) passed all tests. S3 and S4: scale tests at the constraint bound, unprompted, every problem | 1 | **Closed** — habit established across three problems |
-| Relying on transitive includes | `<climits>` ×3, `<algorithm>` ×5, `<unordered_map>` ×3 (once `<map>` instead), `<vector>` ×2, `<cmath>` ×1 | 14 | Active — at least one per session, every session |
+| Relying on transitive includes | `<climits>` ×3, `<algorithm>` ×5, `<unordered_map>` ×3 (once `<map>` instead), `<vector>` ×2, `<cmath>` ×1. S11: none missing across four files, `<cstddef>` added unprompted | 14 | Improving — first clean session; needs two more |
 | Integer type widths | S10: `long` used twice for 64-bit arithmetic; it is 4 bytes on Windows | 2 | New — use `long long` (or `int64_t`) whenever the value needs 64 bits |
-| Tests that cannot fail for the bug they target | S9: every-element loop never reached `return lo`. S10: a range above the last perfect square, every answer identical | 2 | Active — for each test, name the bug that would make it fail |
-| Right conclusion, wrong reason | S10: "Koko's int is safe because we divide first" — division bounds each term, not the total | 1 | New — check the reason against a counterexample (k = 1) |
+| Tests that cannot fail for the bug they target | S9: every-element loop never reached `return lo`. S10: a range above the last perfect square, every answer identical. S11: no test failed without `max` (LC 56) even though one was asked for; a length-100 test of one repeated value (LC 1636) | 4 | Active — for each test, name the bug that would make it fail; for a sort, a test where every order is equal tests nothing |
+| Right conclusion, wrong reason | S10: "Koko's int is safe because we divide first" — division bounds each term, not the total. S11: `lo < hi` fails "because the invariant doesn't hold" — it holds; one element is left unclassified | 2 | Active — check the reason against a counterexample |
 | Tests outside the constraints | S5: target 2×10⁹. S8: a 150,000-element vector. S9: ±10,000 under a strict `<` | 3 | Active — check `<` vs `<=` when turning a bound into a test |
 | Hedging between two patterns | S7: answered two with "fixed array / hash". S9: one answer each | 1 | **Closed** |
 | Leaving the complexity header as `O(?)` | Four problems filled only when asked. S7 and S8: filled before `check` every time | 4 | **Closed** — habit established across five problems |
-| Complexity *values* (the header is written; the number is wrong) | S7: O(n) space for a fixed array. S8: O(1) for a growing map. S9: drill 4/4 on space — then O(n) *time* on LC 35 | 3 | Improving — space now right under questioning; check the value against the loop before `check` |
+| Complexity *values* (the header is written; the number is wrong) | S7: O(n) space for a fixed array. S8: O(1) for a growing map. S9: drill 4/4 on space — then O(n) *time* on LC 35. S11: O(1) space for a by-value copy (LC 1636), O(n) for the same thing an hour earlier (LC 56) | 4 | Improving — space now right under questioning; check the value against the loop before `check` |
 | Unsigned arithmetic near zero | S4: crashed on `end--` past 0. S5: found both bugs in an Attack drill. S6: `nums[i - k]` guarded by `i >= k` in own code, unprompted | 1 | **Closed** — proven in own code |
 | Mapping a spotted trigger to the right pattern | S4: swapped two mappings. S5: 4/4 on cold statements, each tied to a solved problem | 1 | **Closing** — one clean pass |
 | Code drifting from the described approach | Described an O(n) monotonic scan, wrote an O(n²) resetting one, and did not notice | 1 | New — re-read the code against the sentence that described it |
 | Choosing test cases that attack your own code | S1: skipped own cases, 3 bugs survived. S2: wrote 6 cases unprompted incl. negatives and INT_MIN, missed only n=1 | 3 | **Improving fast** — keep drilling |
-| Representing absence (sentinels vs flags) | Chose `second = largest`, then `-1`, then `INT_MIN`; each collided with legal data | 3 | Improving — flag chosen correctly once explained |
+| Representing absence (sentinels vs flags) | Chose `second = largest`, then `-1`, then `INT_MIN`; each collided with legal data. S11 Attack drill: found `{INT_MAX}` and named the rule unaided | 3 | Improving — Attack passed; one more clean pass to close |
 | Reading constraints as a test checklist | "values may be negative" was stated 3 times before it was tested | 1 | Watch |
 
 ---
@@ -90,7 +92,7 @@ Recurring errors, so they become checkable habits rather than surprises.
 | A fix applied to some sites but not all | S7: `unsigned char` cast on 2 of 3 `arr[...]` indexes | 1 | Apply a fix by searching for every site, or read the value once into a correctly typed variable |
 | Reading only the value constraints, never the size constraint | `1 <= n <= 10^4` means "write a test at scale", and it was skipped | 1 | Size bounds are a performance test. Time it, don't assume it |
 | Stale comments left after a refactor | `// TODO` in three files; S6: a commented-out `// if (k == 0) return false;` | 4 | Delete the comment in the same edit that invalidates it — commented-out code included |
-| Answering *what* when asked *why* | S2, S6, then S10 twice: listed what each map stored without why; said `hi` holds the answer without why | 4 | Active — when a question says "why", the answer needs "because" |
+| Answering *what* when asked *why* | S2, S6, then S10 twice: listed what each map stored without why; said `hi` holds the answer without why. S11: "it would work without the tie-breaker"; changed O(1) → O(n) with no reason | 6 | Active — when a question says "why", the answer needs "because" |
 | Decrementing an unsigned index past zero | `end--` on a `size_t` holding 0 wrapped to SIZE_MAX, then indexed | 1 | Check `start >= end` *before* moving pointers, or use a signed index when it can go below 0 |
 | A test that asserts something other than the function's result | `CHECK_TRUE("ABCDEedcba")` — a literal is a non-null pointer, always true | 1 | For every test, ask: what bug would make this fail? |
 | Using a symbol without including its header | `INT_MIN` without `<climits>`, `std::shuffle` without `<algorithm>` | 3 | Every symbol needs its own header, every time |
@@ -104,6 +106,7 @@ I had not seen before.
 
 | Pattern | Recognised on | Trigger — when to reach for it |
 |---------|---------------|--------------------------------|
+| Sort with a custom comparator (then sweep) | LC 56 guided; LC 1636 independently, including a capturing multi-key comparator | Order matters and the input is unordered: after sorting, only neighbours can interact (intervals), or the output *is* an order defined by a rule. Comparator returns true only if a goes strictly before b — `<=` is undefined behaviour. Ties: add a second key, or `stable_sort` for input order. Cost: O(n log n) × one comparison, so take arguments by `const&` |
 | Single-pass running extremum (track best + second-best in variables) | Second Largest — derived unaided, before being shown anything | "Find the best/worst k items" where k is tiny and fixed. Beats sorting: O(n) vs O(n log n) |
 | Binary search on the answer space | Sqrt(x) guided from "write out ok(0), ok(1), …", then Koko independently | No sorted array, but a yes/no question about a candidate answer that flips exactly once (T…TF…F or F…FT…T). Search the range of answers; return `hi` for the last T, `lo` for the first T. Watch the type of whatever the predicate computes |
 | Binary search on a sorted array | LC 704 (guided from a guessing game), LC 35 independently | Sorted/monotonic data and a "where is X?" question. Invariant: the target, if present, is in `[lo, hi]`. Loop `while lo <= hi`, step past `mid`. At exit `lo = hi + 1` is the insertion point. Signed indices; `lo + (hi − lo) / 2` |
@@ -123,12 +126,14 @@ Scheduled by session number. See the schedule in `AGENTS.md`.
 
 | Item | Drill | Last seen | Due | Why queued |
 |------|-------|-----------|-----|------------|
-| Binary search boundaries: why `mid + 1`, why `<=`, which of `lo`/`hi` at exit, and why | Recall | 10 | 11 | Two "which, not why" answers this session |
-| Sentinel inside the legal range | Attack | 7 | 11 | Deferred from S10 |
-| Window invariants — what the window holds, why erase-by-value is safe | Recall | 6 | 11 | Check it survives |
+| Window invariants — what the window holds, why erase-by-value is safe | Recall | 6 | 12 | Deferred from S11 (budget) |
+| Binary search: why `lo < hi` with inclusive updates leaves a bug | Recall | 11 | 12 | S11 Q2: claimed both loops work; reason wrong until traced |
+| Comparator contract: why strict `<`, what ties do under `std::sort` | Recall | 11 | 12 | New |
 | A test that can't fail for its bug — spot it | Attack | 10 | 12 | Twice in two sessions |
 | Recognise a monotonic yes/no question in a cold statement | Recall (recognition) | 10 | 12 | New pattern |
 | Second Largest from a blank file | Re-implement | 1 | 13 | Only once memory has actually decayed |
+| Sentinel inside the legal range | Attack | 11 | 14 | Passed S11; one more to close |
+| Intervals after sorting (e.g. LC 57 Insert Interval / LC 435) | Transfer | 11 | 14 | Merge Intervals was guided — check it generalises |
 
 ## Readiness Assessment
 
@@ -146,7 +151,17 @@ under time pressure. Not to be inflated.
 | Communication | 3 | Terse, accurate answers; asked "what is a sentinel?" instead of bluffing — good instinct |
 | Performance under time pressure | 0 | Not assessed — no timed work yet |
 
-**Overall (S10):** Second Mastered (Valid Anagram, via Group Anagrams).
+**Overall (S11):** Sorting with custom comparators landed quickly: the
+strict-ordering contract and the `<=` contradiction were answered in one step,
+and LC 1636 was solved independently first try with a capturing multi-key
+comparator and an offset array chosen from the constraints. No missing
+includes for the first time. What keeps recurring is rigour around the
+answer, not the answer itself: a requested failing test was absent (a mutation
+passed every check), a scale test could not fail, one space value
+contradicted the previous problem's, and "why" questions still get a "what"
+first.
+
+**Previous (S10):** Second Mastered (Valid Anagram, via Group Anagrams).
 Binary search on the answer space landed fast: the T…TF…F picture was derived
 in one question, and Koko — an independent Medium — was solved with the
 correct mirror boundary. Reasoning is ahead of rigour: the conclusion was
@@ -211,6 +226,7 @@ thing to drill: the names are landing, the recognition sentences are not.
 
 | # | Date | Topic | Problems | Outcome |
 |---|------|-------|----------|---------|
+| 11 | 2026-11-16 | Sorting with custom comparators: the comparator as "should a go before b?", strict ordering and why `<=` is undefined behaviour, equivalent elements and stability, tie-break keys, lambda captures; sorting so only neighbours interact | LC 56 (guided), LC 1636 (independent) | Both solved. Drills: sentinel Attack passed; BS boundaries 2/3 — `lo < hi` needed a trace. Lesson: run the mutation you asked a test to catch. |
 | 10 | 2026-11-15 | Binary search on the answer space: monotonic predicates, first T vs last T, returning `lo` or `hi`, overflow in the predicate, `long` vs `long long` | LC 49 (transfer), LC 69 (guided), LC 875 (independent) | All solved. Valid Anagram → Mastered. Lessons: a test must be able to fail for the bug it targets; a slow suite stops getting run; check a reason against a counterexample. |
 | 9 | 2026-11-13 | Binary search: log₂ n from halving, sortedness as monotonicity, the inclusive invariant, `mid + 1` and `lo <= hi`, signed indices, overflow-safe midpoint, `lo` as the insertion point | LC 704 (guided), LC 35 (independent) | Both solved. Lesson: a scale test that only exercises one code path can't catch bugs in the other — search every gap, not just every element. Drills: space 4/4, recognition committed to one answer each. |
 | 8 | 2026-11-12 | Prefix sums: why negatives break the window (monotonicity), `P[r+1] − P[l]`, complement lookup on prefix sums, the empty-prefix entry, what the map should store | LC 26 (transfer), LC 560 (guided), LC 525 (independent, Hint 1) | All solved. Move Zeroes → Mastered. Drills: amortized argument correct. Lesson: the map's value (count / first / latest) follows from what is being optimised. |

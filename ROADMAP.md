@@ -30,8 +30,8 @@ The vocabulary everything else is written in.
 - [ ] STL: `stack`
 - [ ] STL: `queue`, `deque`
 - [ ] STL: `priority_queue`
-- [ ] Sorting: `std::sort`
-- [ ] Custom comparators (lambdas)
+- [x] Sorting: `std::sort` — strict ordering, stability, `stable_sort`
+- [x] Custom comparators (lambdas) — multi-key, captures, `const&` arguments
 - [ ] Iterators — enough to read STL code
 
 **Exit criteria:** you can state the complexity of a loop nest by inspection,
@@ -51,7 +51,7 @@ Where most interview problems actually live.
 - [x] Sliding window — variable size
 - [x] Binary search on a sorted array
 - [x] Binary search on the answer space
-- [ ] Sorting-based techniques
+- [x] Sorting-based techniques — sort then sweep (intervals), sort by a derived key
 - [ ] String manipulation patterns
 
 **Exit criteria:** given an unseen easy/medium array problem, you can name a
