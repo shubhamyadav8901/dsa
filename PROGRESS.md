@@ -5,7 +5,7 @@ next. Keep it honest — an inflated tracker produces a useless study plan.
 
 - **Session count:** 12
 - **Current phase:** Phase 1 — Core Patterns
-- **Current topic:** String run scanning (done) → next: Phase 1 wrap-up — a mixed cold-recognition set against the exit criteria, plus the Phase 0 gaps `pair` and ordered `map`/`set`; then Phase 2 (linked lists)
+- **Current topic:** String run scanning (done) → next: array traversal patterns (best-ending-here / Kadane, prefix + suffix passes, index-as-hash, voting, 2D traversal); then the Phase 1 wrap-up — a mixed cold-recognition set, plus `pair` and ordered `map`/`set`; then Phase 2 (linked lists)
 - **Last session date:** 2026-11-18
 
 ---
