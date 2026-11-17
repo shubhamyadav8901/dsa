@@ -52,7 +52,7 @@ Where most interview problems actually live.
 - [x] Binary search on a sorted array
 - [x] Binary search on the answer space
 - [x] Sorting-based techniques — sort then sweep (intervals), sort by a derived key
-- [ ] String manipulation patterns
+- [x] String manipulation patterns — run scanning (words, runs), in-place write-behind
 
 **Exit criteria:** given an unseen easy/medium array problem, you can name a
 candidate pattern within a minute and justify the choice.
