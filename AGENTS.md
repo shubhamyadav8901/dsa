@@ -313,3 +313,11 @@ anything solved. Never mark a problem Solved in `PROGRESS.md` without a passing
 test.
 
 Start every new solution from the matching file in `templates/`.
+
+**Test split.** When scaffolding a problem, the tutor writes the boilerplate
+tests in a `// Boilerplate (tutor)` section: the problem's examples, the
+constraint boundaries (smallest `n`, extreme values), and a max-size test
+that can fail for a logic bug, not just one of identical values. Each carries a
+`catches:` comment. I write only the special cases, in a
+`// Special cases (mine)` section, each with a `catches:` comment naming the
+bug it targets. Do not ask me to write boilerplate tests.
