@@ -7,6 +7,7 @@
 #   make test L=cpp                        run only C++ tests
 #   make test T=arrays                     run only the 'arrays' topic
 #   make test L=py T=arrays                combine both filters
+#   make test N=product_except             only test files whose name contains N
 #   make clean                             delete build output
 # ---------------------------------------------------------------------------
 
@@ -22,6 +23,7 @@ LANGUAGES := cpp py java
 # Optional filters (may be empty)
 L ?=
 T ?=
+N ?=
 
 .PHONY: help run test test-cpp test-py test-java clean
 
@@ -31,6 +33,7 @@ help:
 	@echo "  make test                 run all tests in all languages"
 	@echo "  make test L=cpp|py|java   restrict to one language"
 	@echo "  make test T=<topic>       restrict to one topic (e.g. arrays)"
+	@echo "  make test N=<name>        only test files whose name contains <name>"
 	@echo "  make clean                remove build output"
 	@echo ""
 	@echo "  Example: make run FILE=cpp/basics/hello_dsa.cpp"
@@ -65,14 +68,14 @@ test:
 	  echo "Topics: `ls cpp | tr '\n' ' '`"; exit 1; }
 	@fail=0; \
 	 for lang in $(if $(L),$(L),$(LANGUAGES)); do \
-	   $(MAKE) --no-print-directory test-$$lang T="$(T)" || fail=1; \
+	   $(MAKE) --no-print-directory test-$$lang T="$(T)" N="$(N)" || fail=1; \
 	 done; \
 	 exit $$fail
 
 test-cpp:
 	@echo "=== C++ tests ==="
 	@dir="tests/cpp$(if $(T),/$(T))"; \
-	 files=`find "$$dir" -name '*_test.cpp' 2>/dev/null | sort`; \
+	 files=`find "$$dir" -name '*$(N)*_test.cpp' 2>/dev/null | sort`; \
 	 if [ -z "$$files" ]; then echo "  (no C++ tests yet in $$dir)"; exit 0; fi; \
 	 mkdir -p $(BUILD)/bin; fail=0; \
 	 for f in $$files; do \
@@ -91,7 +94,7 @@ test-cpp:
 test-py:
 	@echo "=== Python tests ==="
 	@dir="tests/py$(if $(T),/$(T))"; \
-	 files=`find "$$dir" -name 'test_*.py' 2>/dev/null | sort`; \
+	 files=`find "$$dir" -name 'test_*$(N)*.py' 2>/dev/null | sort`; \
 	 if [ -z "$$files" ]; then echo "  (no Python tests yet in $$dir)"; exit 0; fi; \
 	 mkdir -p $(BUILD); fail=0; \
 	 for f in $$files; do \
@@ -109,7 +112,7 @@ test-py:
 test-java:
 	@echo "=== Java tests ==="
 	@dir="tests/java$(if $(T),/$(T))"; \
-	 files=`find "$$dir" -name '*Test.java' 2>/dev/null | sort`; \
+	 files=`find "$$dir" -name '*$(N)*Test.java' 2>/dev/null | sort`; \
 	 if [ -z "$$files" ]; then echo "  (no Java tests yet in $$dir)"; exit 0; fi; \
 	 mkdir -p $(BUILD)/java; fail=0; \
 	 for f in $$files; do \

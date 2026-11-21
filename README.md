@@ -52,6 +52,7 @@ make test                                # every test, all three languages
 make test L=cpp                          # one language  (cpp | py | java)
 make test T=arrays                       # one topic
 make test L=cpp T=arrays                 # both filters
+make test N=product_except               # test files whose name contains N
 make clean                               # delete build output
 make fmt                                 # reformat C++ and Java in place
 make fmt-check                           # fail if anything is unformatted
