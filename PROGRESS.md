@@ -145,6 +145,7 @@ Scheduled by session number. See the schedule in `AGENTS.md`.
 | Run scanning on an unseen problem (e.g. LC 1446 / LC 38) | Transfer | 12 | 15 | Check it generalises past words and equal-character runs |
 | Simultaneous update — spot a state pair updated in sequence | Attack | 14 | 17 | S14: found `{1, 2}` → 3; blamed the symptom line, not the line reading the new value |
 | Best ending here on an unseen problem (e.g. LC 121 / LC 918) | Transfer | 13 | 16 | LC 152 needed two hints |
+| Prefix + suffix where the passes can't collapse (LC 42 Trapping Rain Water — max, not a sum) | Transfer | 14 | 16 | LC 2483 collapsed to one pass (counts are invertible), so two independent passes were never exercised unaided |
 
 ## Readiness Assessment
 
