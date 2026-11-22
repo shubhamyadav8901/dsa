@@ -41,7 +41,7 @@ and pick the right STL container for a described need without looking it up.
 
 Where most interview problems actually live.
 
-- [~] Array traversal patterns — best ending here (Kadane) ✓, prefix + suffix passes ✓; index as a hash, voting, 2D traversal still to do
+- [~] Array traversal patterns — best ending here (Kadane) ✓, prefix + suffix passes ✓, index as a hash ✓; voting, 2D traversal still to do
 - [x] Prefix sums
 - [x] Frequency counting — fixed-size array over a known alphabet
 - [x] Hashing — the idea, then `unordered_map`/`unordered_set`

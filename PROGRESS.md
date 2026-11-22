@@ -3,9 +3,9 @@
 The tutor reads this file at the start of every session to decide what comes
 next. Keep it honest — an inflated tracker produces a useless study plan.
 
-- **Session count:** 14
+- **Session count:** 15
 - **Current phase:** Phase 1 — Core Patterns
-- **Current topic:** Array traversal: prefix + suffix passes (done) → next: index-as-hash (LC 448), then voting, 2D traversal; then the Phase 1 wrap-up — a mixed cold-recognition set, plus `pair` and ordered `map`/`set`; then Phase 2 (linked lists)
+- **Current topic:** Array traversal: index as a hash (done) → next: voting (LC 169), then 2D traversal; then the Phase 1 wrap-up — a mixed cold-recognition set, plus `pair` and ordered `map`/`set`; then Phase 2 (linked lists)
 - **Last session date:** 2026-11-22
 
 ---
@@ -20,6 +20,8 @@ one.
 
 | # | Problem | Topic | Difficulty | Status | Attempts | Lang | Pattern | Complexity | Notes |
 |---|---------|-------|------------|--------|----------|------|---------|------------|-------|
+| 28 | [Find All Duplicates in an Array](https://leetcode.com/problems/find-all-duplicates-in-an-array/) (LC 442) | arrays | Medium | Solved | 1 | C++ ✓ / Py — / Java — | Index as a hash (negation marks) | O(n) / O(1) extra | Independent, no hints. First version pushed the value *stored in* the slot, not the slot's owner — the examples passed because 2 and 3 sit in each other's slots and sorting hid the swap; the tutor's 10⁵ pairs test caught it. Missed `<cstdlib>`/`<cstddef>` an hour after adding both; caller's `nums` left overwritten until asked; restore test added on request. |
+| 27 | [Find All Numbers Disappeared in an Array](https://leetcode.com/problems/find-all-numbers-disappeared-in-an-array/) (LC 448) | arrays | Easy | Solved | 1 | C++ ✓ / Py — / Java — | Index as a hash (negation marks) | O(n) / O(1) extra | Guided. Hand-traced the marking and explained why `abs` is needed. Named restore vs copy with correct costs; restored inside the read pass. `abs` unqualified with no `<cstdlib>`; `size_t` → `int` implicitly (third session running). Restore untested until asked. |
 | 26 | [Minimum Penalty for a Shop](https://leetcode.com/problems/minimum-penalty-for-a-shop/) (LC 2483) | strings | Medium | Solved | 1 | C++ ✓ / Py — / Java — | One pass, running score (prefix form) | O(n) / O(1) | Independent, no hints. Found the single-pass score (Y − N over open hours) unaided instead of two passes. Seeded `max = -1`, below closing-at-0's real score of 0: `"NY"` returned 2. The tutor's random test found it, not the boilerplate; fixed, and added `"NY"`/`"YN"`. Missed `<cstddef>`; implicit `size_t` → `int`. |
 | 25 | [Product of Array Except Self](https://leetcode.com/problems/product-of-array-except-self/) (LC 238) | arrays | Medium | Solved | 1 | C++ ✓ / Py — / Java — | Prefix + suffix passes | O(n) / O(1) extra | Guided. Identity 1 for an empty side derived with a *because*; O(1)-extra plan (left pass into the output, right pass in one variable) proposed unaided and coded first try. `int i = nums.size() - 2` (convert after subtracting). Special cases: "none" without a reason. |
 | 24 | [Maximum Product Subarray](https://leetcode.com/problems/maximum-product-subarray/) (LC 152) | arrays | Medium | Solved | 1 | C++ ✓ / Py — / Java — | Best ending here, carrying max *and* min | O(n) / O(1) | Independent with **Hints 1 and 2**. Saw by hand that the LC 53 rule fails on `[-2, 3, -4]` before coding. First version allocated a vector per iteration; the rewrite to `std::max({…})`/`std::min({…})` read the already-updated best and went red on the all-negative tests; fixed by saving the previous value. |
@@ -66,10 +68,10 @@ material.
 | Concept | Evidence | Times seen | Status |
 |---------|----------|------------|--------|
 | Testing complexity, not just correctness | S2: O(n²) passed all tests. S3 and S4: scale tests at the constraint bound, unprompted, every problem | 1 | **Closed** — habit established across three problems |
-| Relying on transitive includes | `<climits>` ×3, `<algorithm>` ×5, `<unordered_map>` ×3 (once `<map>` instead), `<vector>` ×2, `<cmath>` ×1. S11: none missing across four files, `<cstddef>` added unprompted. S12: `<string>` missing from a test file; an unused `<algorithm>` left after a rewrite. S13: `<cstddef>` for `size_t` (LC 53); LC 152 clean. S14: `<cstddef>` again (LC 2483); LC 238 clean | 17 | Active — `<cstddef>` for `size_t` is now the usual miss |
+| Relying on transitive includes | `<climits>` ×3, `<algorithm>` ×5, `<unordered_map>` ×3 (once `<map>` instead), `<vector>` ×2, `<cmath>` ×1. S11: none missing across four files, `<cstddef>` added unprompted. S12: `<string>` missing from a test file; an unused `<algorithm>` left after a rewrite. S13: `<cstddef>` for `size_t` (LC 53); LC 152 clean. S14: `<cstddef>` again (LC 2483); LC 238 clean. S15: `<cstdlib>` for `abs` (LC 448), then `<cstdlib>` and `<cstddef>` both missing in LC 442 an hour after adding them | 19 | Active — the header goes in when the symbol does, not at review |
 | Integer type widths | S10: `long` used twice for 64-bit arithmetic; it is 4 bytes on Windows | 2 | New — use `long long` (or `int64_t`) whenever the value needs 64 bits |
 | Tests that cannot fail for the bug they target | S9: every-element loop never reached `return lo`. S10: a range above the last perfect square, every answer identical. S11: no test failed without `max` (LC 56) even though one was asked for; a length-100 test of one repeated value (LC 1636). S12: a "10^4" test that was a 16-character copy of an example; a comment claiming a test checked space complexity; bug-naming comments took two asks. Then named the real bug behind the case/digit tests, and passed the Attack drill (`{2,2,2}`) | 5 | Active — S13: comments still named categories ("all negative", "smoke") until given wording. **Test split agreed S13:** tutor writes boilerplate (examples, bounds, max size); learner writes special cases with a `catches:` comment |
-| Seeding "best so far" with a value no candidate has | S13: avoided it (`nums[0]`). S14: `max = -1` in LC 2483 when closing at hour 0 scores 0 | 1 | New — seed from an actual candidate's value |
+| Seeding "best so far" with a value no candidate has | S13: avoided it (`nums[0]`). S14: `max = -1` in LC 2483 when closing at hour 0 scores 0. S15 Attack: seeded `count_runs` from `v[0]` unprompted | 1 | Improving — applied unprompted in a drill |
 | Right conclusion, wrong reason | S10: "Koko's int is safe because we divide first" — division bounds each term, not the total. S11: `lo < hi` fails "because the invariant doesn't hold" — it holds; one element is left unclassified | 2 | Active — check the reason against a counterexample |
 | Tests outside the constraints | S5: target 2×10⁹. S8: a 150,000-element vector. S9: ±10,000 under a strict `<`. S13: `iota` from −50,000 under `abs(nums[i]) <= 10^4`, then a 200,000-element vector | 5 | Active — check `<` vs `<=` when turning a bound into a test |
 | Hedging between two patterns | S7: answered two with "fixed array / hash". S9: one answer each | 1 | **Closed** |
@@ -79,7 +81,7 @@ material.
 | Mapping a spotted trigger to the right pattern | S4: swapped two mappings. S5: 4/4 on cold statements, each tied to a solved problem | 1 | **Closing** — one clean pass |
 | Code drifting from the described approach | Described an O(n) monotonic scan, wrote an O(n²) resetting one, and did not notice. S12: described direct appends with O(1) extra, wrote `temp` + `reverse` | 2 | Active — re-read the code against the sentence that described it before `check` |
 | Choosing test cases that attack your own code | S1: skipped own cases, 3 bugs survived. S2: wrote 6 cases unprompted incl. negatives and INT_MIN, missed only n=1 | 3 | **Improving fast** — keep drilling |
-| Representing absence (sentinels vs flags) | Chose `second = largest`, then `-1`, then `INT_MIN`; each collided with legal data. S11 Attack drill: found `{INT_MAX}` and named the rule unaided | 3 | Improving — Attack passed; one more clean pass to close |
+| Representing absence (sentinels vs flags) | Chose `second = largest`, then `-1`, then `INT_MIN`; each collided with legal data. S11 and S15 Attack drills: found the colliding input and fixed it without a sentinel | 3 | **Closed** — two clean Attack passes |
 | Reading constraints as a test checklist | "values may be negative" was stated 3 times before it was tested | 1 | Watch |
 
 ---
@@ -114,6 +116,7 @@ I had not seen before.
 
 | Pattern | Recognised on | Trigger — when to reach for it |
 |---------|---------------|--------------------------------|
+| Index as a hash (sign marking) | LC 448 guided from a hand trace; LC 442 independently | n values all in [1, n] and O(1) extra space required: value v owns slot v − 1, negate it to record "seen", read with `abs` because a slot may already be negated. Overwrites the input — restore with an `abs` pass, or say so |
 | Prefix + suffix passes | LC 238 guided (O(1)-extra plan unaided); LC 2483 independently, collapsed to one pass with a running score | "For each index, something about everything except me" or "everything before vs after a split point". One sweep carries the left summary, one the right; start each side at the operation's identity (0 for sums, 1 for products). When the total is fixed, before/after collapses into one running score |
 | Best ending here (Kadane) | LC 53 guided from a hand-filled `end[i]` table; LC 152 with Hints 1–2 (carry max and min) | Best contiguous piece (sum, product, streak). Every piece ends somewhere, so compute the best piece ending at each i from the one ending at i − 1: extend it or start fresh. Answer = max over i. Seed from `nums[0]`, not 0. Carry whatever a later element could flip into the best — the minimum, when negatives multiply |
 | Run scanning (groups of neighbouring characters) | LC 151 guided (mirrored from the end); LC 443 independently with a write-behind pointer | Words between delimiters, runs of equal characters, digit groups. Outer loop finds a group's start, inner loop extends `j` to one past its end, handle `[i, j)`, then `i = j`. O(n) because `i = j` means no index is scanned twice — `++i` there is O(n²) *and* wrong. Handle each group when found, so no flush after the loop |
@@ -137,12 +140,11 @@ Scheduled by session number. See the schedule in `AGENTS.md`.
 
 | Item | Drill | Last seen | Due | Why queued |
 |------|-------|-----------|-----|------------|
-| Recognise a monotonic yes/no question in a cold statement — with the *because* | Recall (recognition) | 14 | 15 | S14: 3/3 patterns, but no reasons until asked; (c)'s reason restated the definition |
+| Recognise a pattern in a cold statement — with the *because* | Recall (recognition) | 15 | 17 | S15: 3/3; real reasons for the BS-on-answer and window cases on the first ask; the divisible-by-k map needed a nudge (prefix remainders, negative `%`) |
 | Second Largest from a blank file | Re-implement | 1 | 16 | Deferred from S13 (too long for a warm-up) |
-| Sentinel inside the legal range | Attack | 11 | 14 | Passed S11; one more to close |
-| Intervals after sorting (e.g. LC 57 Insert Interval / LC 435) | Transfer | 11 | 15 | Merge Intervals was guided — check it generalises |
-| A test that can't fail for its bug — in *own* tests: name the bug per test, no prompt | Constraints-to-tests | 12 | 15 | Attack passes; own tests still don't |
-| Run scanning on an unseen problem (e.g. LC 1446 / LC 38) | Transfer | 12 | 15 | Check it generalises past words and equal-character runs |
+| Intervals after sorting (e.g. LC 57 Insert Interval / LC 435) | Transfer | 11 | wrap-up | Moved into the Phase 1 wrap-up session |
+| Own special cases: does every design decision have a test? | Constraints-to-tests | 15 | 17 | S15: restore logic untested in both problems until asked; "no special cases required" twice |
+| Run scanning on an unseen problem (e.g. LC 1446 / LC 38) | Transfer | 12 | wrap-up | Check it generalises past words and equal-character runs |
 | Simultaneous update — spot a state pair updated in sequence | Attack | 14 | 17 | S14: found `{1, 2}` → 3; blamed the symptom line, not the line reading the new value |
 | Best ending here on an unseen problem (e.g. LC 121 / LC 918) | Transfer | 13 | 16 | LC 152 needed two hints |
 | Prefix + suffix where the passes can't collapse (LC 42 Trapping Rain Water — max, not a sum) | Transfer | 14 | 16 | LC 2483 collapsed to one pass (counts are invertible), so two independent passes were never exercised unaided |
@@ -163,7 +165,16 @@ under time pressure. Not to be inflated.
 | Communication | 3 | Terse, accurate answers; asked "what is a sentinel?" instead of bluffing — good instinct |
 | Performance under time pressure | 0 | Not assessed — no timed work yet |
 
-**Overall (S14):** Prefix + suffix passes were picked up from one worked
+**Overall (S15):** Index-as-hash landed from one hand trace, including why
+`abs` is needed, and transferred to LC 442 unaided. Design trade-offs were
+named correctly (restore vs copy, with costs). The sentinel weak area closed
+after a second clean Attack. The LC 442 bug is the lesson of the session: the
+examples passed because two wrong answers swapped, and only a structured
+max-size test exposed it. Persistent: includes (two headers missed an hour
+after adding them), `size_t` → `int` conversions, and design decisions such
+as the restore left untested until asked.
+
+**Previous (S14):** Prefix + suffix passes were picked up from one worked
 table: the left recurrence, the identity for an empty side, and the O(1)-extra
 plan all came unaided, and LC 238 was correct first try. The independent
 Medium (LC 2483) went further, finding a single running-score pass without
@@ -268,6 +279,7 @@ thing to drill: the names are landing, the recognition sentences are not.
 
 | # | Date | Topic | Problems | Outcome |
 |---|------|-------|----------|---------|
+| 15 | 2026-11-22 | Array traversal — index as a hash: value v owns slot v − 1, sign as a seen-flag, `abs` on read, restoring vs copying vs documenting a mutated input; a slot's owner vs its contents | LC 448 (guided), LC 442 (independent) | Both solved, no hints. Drills: recognition 3/3 (one nudge), sentinel Attack passed — closed. Lesson: passing examples can hide two wrong answers that swap; test every design decision you make, including restoring the input. |
 | 14 | 2026-11-22 | Array traversal — prefix + suffix passes: "everything except me" = left side + right side, the O(1) left recurrence, identity for an empty side, output array as one pass's storage; collapsing before/after into one running score | LC 238 (guided), LC 2483 (independent) | Both solved, no hints. Drills: recognition 3/3 patterns with reasons only on request; paired-state Attack found the input. Lesson: seed "best" from a real candidate. |
 | 13 | 2026-11-21 | Array traversal — best ending here: the `end[i]` table, extend vs start fresh, why a negative prefix is dropped, seeding from `nums[0]`, bounding sums for `int`; carrying max *and* min when negatives multiply; computing a state pair from the old values | LC 53 (guided), LC 152 (independent, Hints 1–2) | Both solved. Drills: comparator 2/2; recognition 2/3 cold (3/3 after a nudge). Lesson: assert the size of generated test input; update paired state from the old values. Test split agreed — tutor writes boilerplate tests. |
 | 12 | 2026-11-18 | String run scanning: find a group's start, extend to one past its end, jump `i = j`; why the nested while is O(n); half-open `[i, j)` ranges; separator before every word but the first; writing behind the read index in place | LC 151 (guided), LC 443 (independent) | Both solved. Drills 3/3 with *because* (test Attack, `lo < hi`, window invariants). Lesson: re-read the code against the plan you stated; a comment on a test must name a bug the test can actually see. |
