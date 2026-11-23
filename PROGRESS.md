@@ -3,10 +3,10 @@
 The tutor reads this file at the start of every session to decide what comes
 next. Keep it honest — an inflated tracker produces a useless study plan.
 
-- **Session count:** 15
+- **Session count:** 16
 - **Current phase:** Phase 1 — Core Patterns
-- **Current topic:** Array traversal: index as a hash (done) → next: voting (LC 169), then 2D traversal; then the Phase 1 wrap-up — a mixed cold-recognition set, plus `pair` and ordered `map`/`set`; then Phase 2 (linked lists)
-- **Last session date:** 2026-11-22
+- **Current topic:** Array traversal: voting (done) → next: 2D traversal (LC 54 Spiral Matrix); then the Phase 1 wrap-up, two sessions — the queued transfers (LC 121/918, LC 42, intervals, run scanning), the Second Largest re-implement, a mixed cold-recognition set, plus `pair` and ordered `map`/`set`; then Phase 2 (linked lists)
+- **Last session date:** 2026-11-24
 
 ---
 
@@ -20,6 +20,8 @@ one.
 
 | # | Problem | Topic | Difficulty | Status | Attempts | Lang | Pattern | Complexity | Notes |
 |---|---------|-------|------------|--------|----------|------|---------|------------|-------|
+| 30 | [Majority Element II](https://leetcode.com/problems/majority-element-ii/) (LC 229) | arrays | Medium | Solved | 3 | C++ ✓ / Py — / Java — | Voting with two candidates, then a counting pass | O(n) / O(1) | Independent with **Hints 1–3**. Two attempts reused single-candidate voting (forwards then backwards; then per index parity), which only guarantees a >½ majority; the tutor's three-way max-size test failed both. The two-candidate version seeded the slots from `nums[0]`/`nums[1]` and returned `{2, 2}` for `[2, 2]`; a differential test found it, the learner found the input. `floor` without `<cmath>`; `size_t` → `int` again. Both complexity answers (3 passes still O(n); output ≤ 2 is O(1)) right with a *because*. |
+| 29 | [Majority Element](https://leetcode.com/problems/majority-element/) (LC 169) | arrays | Easy | Solved | 1 | C++ ✓ / Py — / Java — | Voting (Boyer–Moore) | O(n) / O(1) | Guided. Hand-filled the vote table; gave the cancelled-prefix invariant (at most half majority votes) after one question. Named map/sort costs; needed the verification pass explained twice. `int candidate;` left uninitialized until review; explained why it is never read (count starts at 0) and what `{}` would do. |
 | 28 | [Find All Duplicates in an Array](https://leetcode.com/problems/find-all-duplicates-in-an-array/) (LC 442) | arrays | Medium | Solved | 1 | C++ ✓ / Py — / Java — | Index as a hash (negation marks) | O(n) / O(1) extra | Independent, no hints. First version pushed the value *stored in* the slot, not the slot's owner — the examples passed because 2 and 3 sit in each other's slots and sorting hid the swap; the tutor's 10⁵ pairs test caught it. Missed `<cstdlib>`/`<cstddef>` an hour after adding both; caller's `nums` left overwritten until asked; restore test added on request. |
 | 27 | [Find All Numbers Disappeared in an Array](https://leetcode.com/problems/find-all-numbers-disappeared-in-an-array/) (LC 448) | arrays | Easy | Solved | 1 | C++ ✓ / Py — / Java — | Index as a hash (negation marks) | O(n) / O(1) extra | Guided. Hand-traced the marking and explained why `abs` is needed. Named restore vs copy with correct costs; restored inside the read pass. `abs` unqualified with no `<cstdlib>`; `size_t` → `int` implicitly (third session running). Restore untested until asked. |
 | 26 | [Minimum Penalty for a Shop](https://leetcode.com/problems/minimum-penalty-for-a-shop/) (LC 2483) | strings | Medium | Solved | 1 | C++ ✓ / Py — / Java — | One pass, running score (prefix form) | O(n) / O(1) | Independent, no hints. Found the single-pass score (Y − N over open hours) unaided instead of two passes. Seeded `max = -1`, below closing-at-0's real score of 0: `"NY"` returned 2. The tutor's random test found it, not the boilerplate; fixed, and added `"NY"`/`"YN"`. Missed `<cstddef>`; implicit `size_t` → `int`. |
@@ -45,14 +47,7 @@ one.
 | 6 | [Two Sum](https://leetcode.com/problems/two-sum/) (LC 1) | hashing | Easy | Solved | 1 | C++ ✓ / Py — / Java — | Hash map complement lookup, check-before-insert | O(n) / O(n) | Guided: derived the complement and the key/value choice step by step. Scale generator guarantees a single pair by construction. One test was outside the constraints (target 2×10⁹); a duplicate-answer test was dropped during a fix and re-added. |
 | 5 | [Valid Palindrome](https://leetcode.com/problems/valid-palindrome/) (LC 125) | strings | Easy | Solved | 2 | C++ ✓ / Py — / Java — | Two pointers, opposite ends, with skip-filtering | O(n) / O(1) | Independent problem. First version read out of bounds on `"a!"`: `size_t end` wrapped past 0. Found and explained it from one hint. Also shipped a check that could not fail (`CHECK_TRUE` on a string literal). Verified on 300k random strings under ASan. |
 | 4 | [Reverse String](https://leetcode.com/problems/reverse-string/) (LC 344) | strings | Easy | Solved | 1 | C++ ✓ / Py — / Java — | Two pointers, opposite ends | O(n) / O(1) | Hand-written `swap_chars(char&, char&)`. By-value experiment failed 4/5 — the n=1 case passed, since reversing one element is a no-op. |
-| 3 | [Valid Anagram](https://leetcode.com/problems/valid-anagram/) (LC 242) | strings | Easy | **Mastered** | 1 | C++ ✓ / Py — / Java — | Binary search on the answer space | Sqrt(x) guided from "write out ok(0), ok(1), …", then Koko independently | No sorted array, but a yes/no question about a candidate answer that flips exactly once (T…TF…F or F…FT…T). Search the range of answers; return `hi` for the last T, `lo` for the first T. Watch the type of whatever the predicate computes |
-| Binary search on a sorted array | LC 704 (guided from a guessing game), LC 35 independently | Sorted/monotonic data and a "where is X?" question. Invariant: the target, if present, is in `[lo, hi]`. Loop `while lo <= hi`, step past `mid`. At exit `lo = hi + 1` is the insertion point. Signed indices; `lo + (hi − lo) / 2` |
-| Prefix sums | LC 560 (guided), then LC 525 independently with a value transform | Subarray sums when a window can't work (negatives break monotonicity). `sum(l..r) = P[r+1] − P[l]`; for "sum equals k", look up `P − k` in a map seeded with the empty prefix. The map's value depends on the goal: count (how many), first index (longest), latest index (closest) |
-| Sliding window, variable size | LC 3 (derived from brute force), then LC 209 unaided with the condition inverted | Contiguous subarray/substring, longest or shortest satisfying a condition. Right edge always advances; left edge advances only as far as it must. O(n) because each index enters and leaves once. Longest → shrink while invalid; shortest → shrink while valid. Needs a condition that is monotonic as the window grows (positive numbers in 209) |
-| Sliding window, fixed size | Contains Duplicate II, derived from "which earlier indices can matter for position i?" | "Within distance k", "every window of size k". One element enters and one leaves per step, so update the window's summary in O(1) instead of rebuilding it in O(k) |
-| Hash map for O(1) "have I seen X, and where?" | Two Sum (guided), then transferred unaided to Contains Duplicate II | The brute force's inner loop is *searching for one specific value* (a complement, a repeat). Store what you've seen, keyed by the value you'll look up, mapping to what you need back |
-| Two pointers, opposite ends (converging) | Reverse String, then applied independently to Valid Palindrome | Symmetric comparison or in-place reversal. Pointers start at both ends and move inward; stop when they meet — decide the `<` vs `<=` on purpose |
-| Frequency counting with a fixed-size array | O(n) / O(1) | Correct first try, single count array. Tests included a 50k scale test with fixed seeds. Verified on 400k random pairs vs a sorting reference. **Mastered S10** via transfer to LC 49. |
+| 3 | [Valid Anagram](https://leetcode.com/problems/valid-anagram/) (LC 242) | strings | Easy | **Mastered** | 1 | C++ ✓ / Py — / Java — | Frequency counting with a fixed-size array | O(n) / O(1) | Correct first try, single count array. Tests included a 50k scale test with fixed seeds. Verified on 400k random pairs vs a sorting reference. **Mastered S10** via transfer to LC 49. |
 | 2 | [Move Zeroes](https://leetcode.com/problems/move-zeroes/) (LC 283) | arrays | Easy | **Mastered** | 2 | C++ ✓ / Py — / Java — | Two pointers (read/write scan) | O(n) / O(1) | Tests written before code, incl. n=1 and INT_MIN. First version was O(n²): `j` was reset per iteration, re-walking the same zeroes. Verified on 300k random arrays vs `stable_partition`. **Mastered S8** via transfer to LC 26. |
 | 1 | Second Largest (drill) | basics | Easy | Solved | 4 | C++ ✓ / Py — / Java — | Single-pass running extremum | O(n) / O(1) | Correct on 200k random differential test. Reached the algorithm unaided; all 3 bugs were untested input regions, not logic slips. |
 
@@ -68,10 +63,10 @@ material.
 | Concept | Evidence | Times seen | Status |
 |---------|----------|------------|--------|
 | Testing complexity, not just correctness | S2: O(n²) passed all tests. S3 and S4: scale tests at the constraint bound, unprompted, every problem | 1 | **Closed** — habit established across three problems |
-| Relying on transitive includes | `<climits>` ×3, `<algorithm>` ×5, `<unordered_map>` ×3 (once `<map>` instead), `<vector>` ×2, `<cmath>` ×1. S11: none missing across four files, `<cstddef>` added unprompted. S12: `<string>` missing from a test file; an unused `<algorithm>` left after a rewrite. S13: `<cstddef>` for `size_t` (LC 53); LC 152 clean. S14: `<cstddef>` again (LC 2483); LC 238 clean. S15: `<cstdlib>` for `abs` (LC 448), then `<cstdlib>` and `<cstddef>` both missing in LC 442 an hour after adding them | 19 | Active — the header goes in when the symbol does, not at review |
+| Relying on transitive includes | `<climits>` ×3, `<algorithm>` ×5, `<unordered_map>` ×3 (once `<map>` instead), `<vector>` ×2, `<cmath>` ×1. S11: none missing across four files, `<cstddef>` added unprompted. S12: `<string>` missing from a test file; an unused `<algorithm>` left after a rewrite. S13: `<cstddef>` for `size_t` (LC 53); LC 152 clean. S14: `<cstddef>` again (LC 2483); LC 238 clean. S15: `<cstdlib>` for `abs` (LC 448), then `<cstdlib>` and `<cstddef>` both missing in LC 442 an hour after adding them. S16: `floor` without `<cmath>` and `std::count` without `<algorithm>` in an LC 229 draft | 20 | Active — the header goes in when the symbol does, not at review |
 | Integer type widths | S10: `long` used twice for 64-bit arithmetic; it is 4 bytes on Windows | 2 | New — use `long long` (or `int64_t`) whenever the value needs 64 bits |
 | Tests that cannot fail for the bug they target | S9: every-element loop never reached `return lo`. S10: a range above the last perfect square, every answer identical. S11: no test failed without `max` (LC 56) even though one was asked for; a length-100 test of one repeated value (LC 1636). S12: a "10^4" test that was a 16-character copy of an example; a comment claiming a test checked space complexity; bug-naming comments took two asks. Then named the real bug behind the case/digit tests, and passed the Attack drill (`{2,2,2}`) | 5 | Active — S13: comments still named categories ("all negative", "smoke") until given wording. **Test split agreed S13:** tutor writes boilerplate (examples, bounds, max size); learner writes special cases with a `catches:` comment |
-| Seeding "best so far" with a value no candidate has | S13: avoided it (`nums[0]`). S14: `max = -1` in LC 2483 when closing at hour 0 scores 0. S15 Attack: seeded `count_runs` from `v[0]` unprompted | 1 | Improving — applied unprompted in a drill |
+| Seeding "best so far" with a value no candidate has | S13: avoided it (`nums[0]`). S14: `max = -1` in LC 2483 when closing at hour 0 scores 0. S15 Attack: seeded `count_runs` from `v[0]` unprompted. S16: `int candidate;` left uninitialized (LC 169); LC 229 seeded two slots so they could end holding the same value | 2 | Active — when seeding, ask what the seed can collide with |
 | Right conclusion, wrong reason | S10: "Koko's int is safe because we divide first" — division bounds each term, not the total. S11: `lo < hi` fails "because the invariant doesn't hold" — it holds; one element is left unclassified | 2 | Active — check the reason against a counterexample |
 | Tests outside the constraints | S5: target 2×10⁹. S8: a 150,000-element vector. S9: ±10,000 under a strict `<`. S13: `iota` from −50,000 under `abs(nums[i]) <= 10^4`, then a 200,000-element vector | 5 | Active — check `<` vs `<=` when turning a bound into a test |
 | Hedging between two patterns | S7: answered two with "fixed array / hash". S9: one answer each | 1 | **Closed** |
@@ -82,6 +77,7 @@ material.
 | Code drifting from the described approach | Described an O(n) monotonic scan, wrote an O(n²) resetting one, and did not notice. S12: described direct appends with O(1) extra, wrote `temp` + `reverse` | 2 | Active — re-read the code against the sentence that described it before `check` |
 | Choosing test cases that attack your own code | S1: skipped own cases, 3 bugs survived. S2: wrote 6 cases unprompted incl. negatives and INT_MIN, missed only n=1 | 3 | **Improving fast** — keep drilling |
 | Representing absence (sentinels vs flags) | Chose `second = largest`, then `-1`, then `INT_MIN`; each collided with legal data. S11 and S15 Attack drills: found the colliding input and fixed it without a sentinel | 3 | **Closed** — two clean Attack passes |
+| Reusing an algorithm whose guarantee is weaker than the question | S16: LC 229 attempted twice with single-candidate voting (>½ guarantee) for a >⅓ question; changing the scan direction or splitting by parity cannot change the guarantee | 1 | New — before reusing a tool, state what it guarantees and check it against the threshold |
 | Reading constraints as a test checklist | "values may be negative" was stated 3 times before it was tested | 1 | Watch |
 
 ---
@@ -101,10 +97,11 @@ Recurring errors, so they become checkable habits rather than surprises.
 | A fix applied to some sites but not all | S7: `unsigned char` cast on 2 of 3 `arr[...]` indexes | 1 | Apply a fix by searching for every site, or read the value once into a correctly typed variable |
 | Reading only the value constraints, never the size constraint | `1 <= n <= 10^4` means "write a test at scale", and it was skipped | 1 | Size bounds are a performance test. Time it, don't assume it |
 | Stale comments left after a refactor | `// TODO` in three files; S6: a commented-out `// if (k == 0) return false;` | 4 | Delete the comment in the same edit that invalidates it — commented-out code included |
-| Answering *what* when asked *why* | S2, S6, then S10 twice: listed what each map stored without why; said `hi` holds the answer without why. S11: "it would work without the tie-breaker"; changed O(1) → O(n) with no reason. S12: "the total is n" for the nested-while bound. Against that: three drills and both LC 443 questions answered with a *because* on the first ask. S14: recognition drill gave three answers with no *because*; (c)'s then restated monotonicity; "none" for special cases without a reason | 8 | Active — when a question says "why", the answer needs "because" |
+| Answering *what* when asked *why* | S2, S6, then S10 twice: listed what each map stored without why; said `hi` holds the answer without why. S11: "it would work without the tie-breaker"; changed O(1) → O(n) with no reason. S12: "the total is n" for the nested-while bound. Against that: three drills and both LC 443 questions answered with a *because* on the first ask. S14: recognition drill gave three answers with no *because*; (c)'s then restated monotonicity; "none" for special cases without a reason. S16: the LC 42 recall restated the question ("right max can't be calculated from the left") instead of "max can't be undone"; "count winds up at 0" for why voting is correct | 9 | Active — when a question says "why", the answer needs "because" |
 | Decrementing an unsigned index past zero | `end--` on a `size_t` holding 0 wrapped to SIZE_MAX, then indexed | 1 | Check `start >= end` *before* moving pointers, or use a signed index when it can go below 0 |
 | A test that asserts something other than the function's result | `CHECK_TRUE("ABCDEedcba")` — a literal is a non-null pointer, always true | 1 | For every test, ask: what bug would make this fail? |
 | Updating two state variables in sequence when both need the old values | LC 152: `worst` computed from the already-updated `best` | 1 | Compute every new value from the old ones first (save the old value, or compute candidates into locals), then assign |
+| Converting `size_t` to `int` implicitly | `int i = nums.size() - 2` (LC 238), then LC 2483, LC 448, and `int k = nums.size() / 3` (LC 229) | 4 | Cast explicitly at the one place the size becomes an `int`, and decide whether to cast before or after the arithmetic |
 | Using a symbol without including its header | `INT_MIN` without `<climits>`, `std::shuffle` without `<algorithm>` | 3 | Every symbol needs its own header, every time |
 
 ---
@@ -116,6 +113,7 @@ I had not seen before.
 
 | Pattern | Recognised on | Trigger — when to reach for it |
 |---------|---------------|--------------------------------|
+| Voting (cancellation) | LC 169 guided from a hand-filled vote table; LC 229 independently with Hints 1–3 (two candidates) | One value (or a few) appearing more than n/k times, in O(1) space. Cancel k distinct values at a time with k − 1 candidate/count slots; there are at most n/k cancellations, so a value above n/k always survives. Survivors are only suspects: count them in a second pass unless the problem guarantees an answer. Check matches before empty slots, so one value can't take two |
 | Index as a hash (sign marking) | LC 448 guided from a hand trace; LC 442 independently | n values all in [1, n] and O(1) extra space required: value v owns slot v − 1, negate it to record "seen", read with `abs` because a slot may already be negated. Overwrites the input — restore with an `abs` pass, or say so |
 | Prefix + suffix passes | LC 238 guided (O(1)-extra plan unaided); LC 2483 independently, collapsed to one pass with a running score | "For each index, something about everything except me" or "everything before vs after a split point". One sweep carries the left summary, one the right; start each side at the operation's identity (0 for sums, 1 for products). When the total is fixed, before/after collapses into one running score |
 | Best ending here (Kadane) | LC 53 guided from a hand-filled `end[i]` table; LC 152 with Hints 1–2 (carry max and min) | Best contiguous piece (sum, product, streak). Every piece ends somewhere, so compute the best piece ending at each i from the one ending at i − 1: extend it or start fresh. Answer = max over i. Seed from `nums[0]`, not 0. Carry whatever a later element could flip into the best — the minimum, when negatives multiply |
@@ -141,13 +139,14 @@ Scheduled by session number. See the schedule in `AGENTS.md`.
 | Item | Drill | Last seen | Due | Why queued |
 |------|-------|-----------|-----|------------|
 | Recognise a pattern in a cold statement — with the *because* | Recall (recognition) | 15 | 17 | S15: 3/3; real reasons for the BS-on-answer and window cases on the first ask; the divisible-by-k map needed a nudge (prefix remainders, negative `%`) |
-| Second Largest from a blank file | Re-implement | 1 | 16 | Deferred from S13 (too long for a warm-up) |
+| Second Largest from a blank file | Re-implement | 1 | wrap-up | Deferred from S13 and S16 (too long for a warm-up) |
 | Intervals after sorting (e.g. LC 57 Insert Interval / LC 435) | Transfer | 11 | wrap-up | Moved into the Phase 1 wrap-up session |
 | Own special cases: does every design decision have a test? | Constraints-to-tests | 15 | 17 | S15: restore logic untested in both problems until asked; "no special cases required" twice |
 | Run scanning on an unseen problem (e.g. LC 1446 / LC 38) | Transfer | 12 | wrap-up | Check it generalises past words and equal-character runs |
 | Simultaneous update — spot a state pair updated in sequence | Attack | 14 | 17 | S14: found `{1, 2}` → 3; blamed the symptom line, not the line reading the new value |
-| Best ending here on an unseen problem (e.g. LC 121 / LC 918) | Transfer | 13 | 16 | LC 152 needed two hints |
-| Prefix + suffix where the passes can't collapse (LC 42 Trapping Rain Water — max, not a sum) | Transfer | 14 | 16 | LC 2483 collapsed to one pass (counts are invertible), so two independent passes were never exercised unaided |
+| Best ending here on an unseen problem (e.g. LC 121 / LC 918) | Transfer | 13 | wrap-up | LC 152 needed two hints; moved into the wrap-up in S16 |
+| Prefix + suffix where the passes can't collapse (LC 42 Trapping Rain Water — max, not a sum) | Transfer | 14 | wrap-up | LC 2483 collapsed to one pass (counts are invertible), so two independent passes were never exercised unaided. S16 recall restated the question instead of "max can't be undone" |
+| Voting: why k − 1 slots, the n/k cancellation bound, when verification can be skipped | Recall | 16 | 18 | LC 229 took Hints 1–3 and two wrong attempts before the bound was clear |
 
 ## Readiness Assessment
 
@@ -165,7 +164,17 @@ under time pressure. Not to be inflated.
 | Communication | 3 | Terse, accurate answers; asked "what is a sentinel?" instead of bluffing — good instinct |
 | Performance under time pressure | 0 | Not assessed — no timed work yet |
 
-**Overall (S15):** Index-as-hash landed from one hand trace, including why
+**Overall (S16):** Voting landed as an idea: the vote table was right and the
+cancelled-prefix invariant came after one question. The independent Medium
+(LC 229) was the hardest so far and took all three hints. Both failed attempts
+shared one root cause, reusing single-candidate voting, whose >½ guarantee
+cannot answer a >⅓ question however the array is scanned. The working version
+shipped a seeding bug (one value reported twice) that the tests missed and a
+differential test found; the learner found the input. Complexity answers were
+right with a *because*. Both warm-up recalls gave a *what* where a *why* was
+asked. Persistent: includes, `size_t` → `int`, and seeds.
+
+**Previous (S15):** Index-as-hash landed from one hand trace, including why
 `abs` is needed, and transferred to LC 442 unaided. Design trade-offs were
 named correctly (restore vs copy, with costs). The sentinel weak area closed
 after a second clean Attack. The LC 442 bug is the lesson of the session: the
@@ -279,6 +288,7 @@ thing to drill: the names are landing, the recognition sentences are not.
 
 | # | Date | Topic | Problems | Outcome |
 |---|------|-------|----------|---------|
+| 16 | 2026-11-23 – 24 | Array traversal — voting: cancelling pairs of distinct values, why a fully cancelled prefix leaves the majority a majority, when the verification pass can be skipped; generalising to k − 1 candidates for more than n/k | LC 169 (guided), LC 229 (independent, Hints 1–3) | Both solved. Drills: index-as-hash 1.5/2 (missed "all values positive" as the sign-flag condition); prefix + suffix recall gave a *what*. Lesson: check what a reused algorithm guarantees before reusing it. |
 | 15 | 2026-11-22 | Array traversal — index as a hash: value v owns slot v − 1, sign as a seen-flag, `abs` on read, restoring vs copying vs documenting a mutated input; a slot's owner vs its contents | LC 448 (guided), LC 442 (independent) | Both solved, no hints. Drills: recognition 3/3 (one nudge), sentinel Attack passed — closed. Lesson: passing examples can hide two wrong answers that swap; test every design decision you make, including restoring the input. |
 | 14 | 2026-11-22 | Array traversal — prefix + suffix passes: "everything except me" = left side + right side, the O(1) left recurrence, identity for an empty side, output array as one pass's storage; collapsing before/after into one running score | LC 238 (guided), LC 2483 (independent) | Both solved, no hints. Drills: recognition 3/3 patterns with reasons only on request; paired-state Attack found the input. Lesson: seed "best" from a real candidate. |
 | 13 | 2026-11-21 | Array traversal — best ending here: the `end[i]` table, extend vs start fresh, why a negative prefix is dropped, seeding from `nums[0]`, bounding sums for `int`; carrying max *and* min when negatives multiply; computing a state pair from the old values | LC 53 (guided), LC 152 (independent, Hints 1–2) | Both solved. Drills: comparator 2/2; recognition 2/3 cold (3/3 after a nudge). Lesson: assert the size of generated test input; update paired state from the old values. Test split agreed — tutor writes boilerplate tests. |
